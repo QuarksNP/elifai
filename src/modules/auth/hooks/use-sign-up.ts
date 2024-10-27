@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { SignUpFormSchema } from "../lib/definitions";
+import { SignUpSchema } from "../lib/definitions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signUp } from "../actions/sign-up";
 import { toast } from "sonner";
 
-type SignUpFormData = z.infer<typeof SignUpFormSchema>;
+type SignUpFormData = z.infer<typeof SignUpSchema>;
 
 export const useSignUp = () => {
   const form = useForm<SignUpFormData>({
-    resolver: zodResolver(SignUpFormSchema),
+    resolver: zodResolver(SignUpSchema),
     mode: "onChange",
     defaultValues: {
       fullname: "",
@@ -25,7 +25,7 @@ export const useSignUp = () => {
       const result = await signUp(data);
 
       if (result?.success === false) {
-        toast.error(result.message);
+        toast.error(result.errors);
       }
     } catch (error) {
       if (error instanceof Error) {

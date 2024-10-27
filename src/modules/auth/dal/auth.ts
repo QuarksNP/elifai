@@ -59,7 +59,7 @@ export class Auth {
       });
 
       if (!user) {
-        return { success: false, message: "Invalid credentials" };
+        return { success: false, errors: "Invalid credentials" };
       }
 
       const isValidPassword = await comparePassword({
@@ -68,12 +68,12 @@ export class Auth {
       });
 
       if (!isValidPassword) {
-        return { success: false, message: "Invalid credentials" };
+        return { success: false, errors: "Invalid credentials" };
       }
 
       await setSession({ userId: user.id });
 
-      return { success: true, message: "User authenticated" };
+      return { success: true, errors: "User authenticated" };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new Error("Ups, something went wrong...", {
@@ -87,7 +87,7 @@ export class Auth {
   static signUp = cache(async (data: UserCreateInput) => {
     try {
       if (data.password !== data.confirmPassword) {
-        return { success: false, message: "Your password do not match" };
+        return { success: false, errors: "Your password do not match" };
       }
 
       const hashedPassword = await hashPassword(data.password);
@@ -105,12 +105,12 @@ export class Auth {
       });
 
       if (!user) {
-        return { success: false, message: "Error creating user" };
+        return { success: false, errors: "Error creating user" };
       }
 
       await setSession({ userId: user.id });
 
-      return { success: true, message: "User authenticated and created" };
+      return { success: true, errors: "User authenticated and created" };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new Error("Ups, something went wrong...", {

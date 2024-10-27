@@ -1,26 +1,33 @@
+'use client';
+
 import { Button } from "@/modules/core/components/ui/button"
 
 import google_icon from "@/modules/core/assets/svgs/google.svg"
 import apple_icon from "@/modules/core/assets/svgs/apple.svg"
 import Image from "next/image"
+import { useGoogle } from "../hooks/use-google"
 
 const ButtonWrapper = ({
     children,
     className,
+    onClick,
 }: {
     children: React.ReactNode,
     className?: string,
+    onClick: () => void,
 }) => {
     return (
-        <Button variant="secondary" className={className}>
+        <Button variant="secondary" className={className} onClick={onClick}>
             {children}
         </Button>
     )
 }
 
 export const GoogleButton = ({ className }: { className?: string }) => {
+    const { handleGoogleSignIn } = useGoogle()
+
     return (
-        <ButtonWrapper className={className}>
+        <ButtonWrapper className={className} onClick={async () => await handleGoogleSignIn()}>
             <Image 
                 src={google_icon}
                 alt="google-icon"

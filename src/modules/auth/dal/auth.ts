@@ -58,7 +58,7 @@ export class Auth {
         },
       });
 
-      if (!user) {
+      if (!user || !user.password) {
         return { success: false, errors: "Invalid credentials" };
       }
 

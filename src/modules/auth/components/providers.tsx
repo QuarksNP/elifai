@@ -28,7 +28,7 @@ export const GoogleButton = ({ className }: { className?: string }) => {
 
     return (
         <ButtonWrapper className={className} onClick={async () => await handleGoogleSignIn()}>
-            <Image 
+            <Image
                 src={google_icon}
                 alt="google-icon"
                 width={30}
@@ -41,8 +41,8 @@ export const GoogleButton = ({ className }: { className?: string }) => {
 
 export const AppleButton = ({ className }: { className?: string }) => {
     return (
-        <ButtonWrapper className={className}>
-            <Image 
+        <ButtonWrapper className={className} onClick={() => void {}}>
+            <Image
                 src={apple_icon}
                 alt="apple-icon"
                 width={24}

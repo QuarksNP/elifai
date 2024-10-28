@@ -7,7 +7,6 @@ import { redirect } from "next/navigation";
 import { getSession, setSession } from "../lib/session";
 
 import prisma from "@/modules/core/lib/prisma";
-import { Prisma } from "@prisma/client";
 
 import { comparePassword, hashPassword } from "../lib/encrypt-password";
 
@@ -74,12 +73,7 @@ export class Auth {
       await setSession({ userId: user.id });
 
       return { success: true, errors: "User authenticated" };
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new Error("Ups, something went wrong...", {
-          cause: error.cause,
-        });
-      }
+    } catch {
       throw new Error("Ups, something went wrong...");
     }
   });
@@ -111,12 +105,7 @@ export class Auth {
       await setSession({ userId: user.id });
 
       return { success: true, errors: "User authenticated and created" };
-    } catch (error) {
-      if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        throw new Error("Ups, something went wrong...", {
-          cause: error.cause,
-        });
-      }
+    } catch {
       throw new Error("Ups, something went wrong...");
     }
   });

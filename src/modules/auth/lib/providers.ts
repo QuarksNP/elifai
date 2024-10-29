@@ -1,6 +1,6 @@
 'server-only';
 
-import { generateCodeVerifier, generateState, Google } from "arctic";
+import { generateCodeVerifier, generateState, Google, Twitter } from "arctic";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
@@ -8,8 +8,6 @@ import { cache } from "react";
 const setCookies = () => {
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
-
-  console.log("clientId", process.env.GOOGLE_CLIENT_ID);
 
   cookies().set("state", state, {
     secure: process.env.NODE_ENV === "production",
@@ -36,6 +34,12 @@ export const google = new Google(
   process.env.GOOGLE_REDIRECT_URI as string
 );
 
+export const twitter = new Twitter(
+  process.env.TWITTER_CLIENT_ID as string,
+  process.env.TWITTER_CLIENT_SECRET_ID as string,
+  process.env.TWITTER_REDIRECT_URI as string
+);
+
 export const googleProviderCallback = cache(async () => {
   const { state, codeVerifier } = setCookies();
 
@@ -43,6 +47,17 @@ export const googleProviderCallback = cache(async () => {
     "openid",
     "profile",
     "email",
+  ]);
+
+  return redirect(URL.toString());
+});
+
+export const twitterProviderCallback = cache(async () => {
+  const { state, codeVerifier } = setCookies();
+
+  const URL = twitter.createAuthorizationURL(state, codeVerifier, [
+    "users.read",
+    "tweet.read",
   ]);
 
   return redirect(URL.toString());

@@ -6,6 +6,7 @@ import google_icon from "@/modules/core/assets/svgs/google.svg"
 import apple_icon from "@/modules/core/assets/svgs/apple.svg"
 import Image from "next/image"
 import { useGoogle } from "../hooks/use-google"
+import { useTwitter } from "../hooks/use-twitter";
 
 const ButtonWrapper = ({
     children,
@@ -40,8 +41,10 @@ export const GoogleButton = ({ className }: { className?: string }) => {
 }
 
 export const AppleButton = ({ className }: { className?: string }) => {
+    const { handleTwitterSignIn } = useTwitter()
+
     return (
-        <ButtonWrapper className={className} onClick={() => void {}}>
+        <ButtonWrapper className={className} onClick={async () => await handleTwitterSignIn()}>
             <Image
                 src={apple_icon}
                 alt="apple-icon"

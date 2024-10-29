@@ -4,13 +4,12 @@ import { cache } from "react";
 
 import { redirect } from "next/navigation";
 
-import { getSession, setSession } from "../lib/session";
+import { getSession, setSession } from "./session";
 
 import prisma from "@/modules/core/lib/prisma";
 
-import { comparePassword, hashPassword } from "../lib/encrypt-password";
+import { comparePassword, hashPassword } from "./encrypt-password";
 
-import type { Constructor } from "@/modules/core/types";
 import type { SignInRequest, UserCreateInput } from "../types";
 
 export const __VERIFY_SESSION__ = cache(async () => {
@@ -26,26 +25,28 @@ export const __VERIFY_SESSION__ = cache(async () => {
   };
 });
 
-export function protect<T extends Constructor>(constructor: T) {
-  for (const key of Object.getOwnPropertyNames(constructor.prototype)) {
-    const originalMethod = constructor.prototype[key];
+export function protect(
+  _: unknown,
+  propertyKey: string,
+  descriptor: PropertyDescriptor
+) {
+  const originalMethod = descriptor.value;
 
-    if (typeof originalMethod === "function" && key !== "constructor") {
-      constructor.prototype[key] = async function (...args: unknown[]) {
-        const session = await __VERIFY_SESSION__();
+  descriptor.value = async function (...args: unknown[]) {
+    const { isAuthenticated } = await __VERIFY_SESSION__();
 
-        if (!session) {
-          throw new Error(`No session found, cannot execute ${key}`);
-        }
-
-        return originalMethod.apply(this, args);
-      };
+    if (!isAuthenticated) {
+      throw new Error(`Unauthorized, cannot execute ${propertyKey}`);
     }
-  }
+
+    return originalMethod.apply(this, args);
+  };
+
+  return descriptor;
 }
 
-export class Auth {
-  static signIn = cache(async (data: SignInRequest) => {
+class Auth {
+  static async signIn(data: SignInRequest) {
     try {
       const user = await prisma.user.findFirst({
         where: {
@@ -76,15 +77,45 @@ export class Auth {
     } catch {
       throw new Error("Ups, something went wrong...");
     }
-  });
+  }
 
-  static signUp = cache(async (data: UserCreateInput) => {
+  static async signUp(data: UserCreateInput) {
     try {
       if (data.password !== data.confirmPassword) {
         return { success: false, errors: "Your password do not match" };
       }
 
       const hashedPassword = await hashPassword(data.password);
+
+      const usernameExists =
+        (await prisma.user.findFirst({
+          where: {
+            username: data.username,
+          },
+
+          select: {
+            username: true,
+          }
+        }));
+
+      if (usernameExists) {
+        return { success: false, errors: `${usernameExists.username} already exists` };
+      }
+
+      const emailExists =
+        (await prisma.user.findFirst({
+          where: {
+            email: data.email,
+          },
+
+          select: {
+            email: true,
+          }
+        }));
+
+      if (emailExists) {
+        return { success: false, errors: `${emailExists.email} already exists` };
+      }
 
       const user = await prisma.user.create({
         data: {
@@ -108,5 +139,10 @@ export class Auth {
     } catch {
       throw new Error("Ups, something went wrong...");
     }
-  });
+  }
 }
+
+Auth.signIn = cache(Auth.signIn);
+Auth.signUp = cache(Auth.signUp);
+
+export { Auth };

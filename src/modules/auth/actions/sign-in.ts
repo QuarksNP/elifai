@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Auth } from "../dal/auth";
+import { Auth } from "../lib/dal";
 
 import type { SignInRequest } from "../types";
 import { redirect } from "next/navigation";

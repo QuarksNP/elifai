@@ -18,7 +18,7 @@ model User {
   id        String   @id @default(uuid())
   googleId  String?   @unique
   twitterId String?   @unique
-  username  String?
+  username  String?   @unique
   email     String?   @unique
   fullname  String
   password  String?

@@ -1,15 +1,14 @@
 "server-only";
 
-import { __VERIFY_SESSION__, protect } from "@/modules/auth/dal/auth";
+import { protect } from "@/modules/auth/dal/auth";
 
 import prisma from "@/modules/core/lib/prisma";
+import { cache } from "react";
 
 @protect
 export class User {
-  static getUser = async () => {
+  static getUser = cache(async (userId: string) => {
     try {
-      const { userId } = await __VERIFY_SESSION__();
-
       const user = await prisma.user.findUniqueOrThrow({
         where: {
           id: userId,
@@ -22,8 +21,9 @@ export class User {
       });
 
       return user;
-    } catch {
+    } catch (error){
+        console.log(error);
       throw new Error("Ups, something went wrong...");
     }
-  };
+  });
 }

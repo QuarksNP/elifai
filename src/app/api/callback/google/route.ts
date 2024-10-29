@@ -46,33 +46,27 @@ export async function GET(req: NextRequest) {
 
     const claims = decodeIdToken(idToken) as GoogleUserToken;
 
-    if (!claims || !claims.email) {
+    if (!claims) {
       throw new Error("Invalid request");
     }
 
-    let user = await prisma.user.findFirst({
-      where: {
-        email: claims.email,
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          googleId: claims.sub,
-          email: claims.email,
-          fullname: claims.name,
+    const dbUser =
+      (await prisma.user.findUnique({
+        where: {
+          googleId: claims.sub
         },
         select: {
-          id: true,
-        },
-      });
-    }
+          id: true
+        }
+      })) ?? 
+      (await prisma.user.create({
+        data: {
+          googleId: claims.sub,
+          fullname: claims.name
+        }
+      }))
 
-    await setSession({ userId: user.id });
+    await setSession({ userId: dbUser.id });
   } catch (error) {
     console.error(error);
   } finally {

@@ -63,6 +63,9 @@ export async function GET(req: NextRequest) {
         data: {
           googleId: claims.sub,
           fullname: claims.name
+        },
+        select: {
+          id: true,
         }
       }))
 

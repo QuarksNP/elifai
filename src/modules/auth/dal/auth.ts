@@ -26,7 +26,7 @@ export const __VERIFY_SESSION__ = cache(async () => {
   };
 });
 
-export function session<T extends Constructor>(constructor: T) {
+export function protect<T extends Constructor>(constructor: T) {
   for (const key of Object.getOwnPropertyNames(constructor.prototype)) {
     const originalMethod = constructor.prototype[key];
 

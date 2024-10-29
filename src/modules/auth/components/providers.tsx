@@ -3,10 +3,11 @@
 import { Button } from "@/modules/core/components/ui/button"
 
 import google_icon from "@/modules/core/assets/svgs/google.svg"
-import apple_icon from "@/modules/core/assets/svgs/apple.svg"
+import x_icon from "@/modules/core/assets/svgs/X_Twitter.svg";
 import Image from "next/image"
 import { useGoogle } from "../hooks/use-google"
 import { useTwitter } from "../hooks/use-twitter";
+import { cn } from "@/modules/core/lib/cn";
 
 const ButtonWrapper = ({
     children,
@@ -18,7 +19,11 @@ const ButtonWrapper = ({
     onClick: () => void,
 }) => {
     return (
-        <Button variant="secondary" className={className} onClick={onClick}>
+        <Button 
+            variant="secondary" 
+            onClick={onClick}
+            className={cn("flex", className)}
+        >
             {children}
         </Button>
     )
@@ -32,26 +37,22 @@ export const GoogleButton = ({ className }: { className?: string }) => {
             <Image
                 src={google_icon}
                 alt="google-icon"
-                width={30}
-                height={30}
-                className="mr-2"
-            /> Continue with Google
+                className="w-6 h-6 mr-auto"
+            /> <span className="flex-grow">Continue with Google</span>
         </ButtonWrapper>
     )
 }
 
-export const AppleButton = ({ className }: { className?: string }) => {
+export const TwitterButton = ({ className }: { className?: string }) => {
     const { handleTwitterSignIn } = useTwitter()
 
     return (
         <ButtonWrapper className={className} onClick={async () => await handleTwitterSignIn()}>
             <Image
-                src={apple_icon}
+                src={x_icon}
                 alt="apple-icon"
-                width={24}
-                height={24}
-                className="mr-2"
-            /> Continue with Apple
+                className="w-6 h-6 mr-auto"
+            /> <span className="flex-grow">Continue with X</span>
         </ButtonWrapper>
     )
 }

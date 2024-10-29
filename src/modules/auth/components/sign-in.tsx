@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/modules/core/components/ui/dialog";
 import { useMediaQuery } from "@/modules/core/hooks/use-media-query"
-import { AppleButton, GoogleButton } from "./providers";
+import { TwitterButton, GoogleButton } from "./providers";
 import { Separator } from "@/modules/core/components/ui/separator";
 import { Button } from "@/modules/core/components/ui/button";
 import { ButtonAsLink } from "@/modules/core/components/button-as-link";
@@ -27,7 +27,7 @@ export const SignIn = () => {
                         </div>
                     </DialogHeader>
                     <GoogleButton />
-                    <AppleButton />
+                    <TwitterButton />
 
                     <div className="relative flex flex-col items-center justify-center w-full">
                         <Separator className="absolute w-full" />
@@ -66,7 +66,7 @@ export const SignIn = () => {
                 <ScrollArea className="overflow-auto">
                     <div className="w-full flex flex-col gap-4">
                         <GoogleButton />
-                        <AppleButton />
+                        <TwitterButton />
 
                         <div className="relative flex flex-col items-center justify-center w-full">
                             <Separator className="absolute w-full" />

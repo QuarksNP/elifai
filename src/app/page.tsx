@@ -1,4 +1,4 @@
-import { AppleButton, GoogleButton } from "@/modules/auth/components/providers";
+import { TwitterButton, GoogleButton } from "@/modules/auth/components/providers";
 import { ButtonAsLink } from "@/modules/core/components/button-as-link";
 import { Logo } from "@/modules/core/components/logo";
 import { Separator } from "@/modules/core/components/ui/separator";
@@ -20,7 +20,7 @@ export default function Home() {
                 <div className="lg:w-96 space-y-8">
                     <div className="flex flex-col w-full gap-4">
                         <GoogleButton />
-                        <AppleButton />
+                        <TwitterButton />
                     </div>
 
                     <div className="relative flex flex-col items-center justify-center w-full">

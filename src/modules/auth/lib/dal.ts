@@ -4,7 +4,7 @@ import { cache } from "react";
 
 import { redirect } from "next/navigation";
 
-import { getSession, setSession } from "./session";
+import { setSession, getSession } from "./session";
 
 import prisma from "@/modules/core/lib/prisma";
 
@@ -15,7 +15,7 @@ import type { SignInRequest, UserCreateInput } from "../types";
 export const __VERIFY_SESSION__ = cache(async () => {
   const session = await getSession();
 
-  if (!session?.userId) {
+  if (!session) {
     redirect("/");
   }
 

@@ -17,8 +17,8 @@ export const signIn = async (user: SignInRequest) => {
   const result = await Auth.signIn(user);
 
   if (result.success) {
-    revalidatePath("/dashboard");
-    redirect("/dashboard");
+    revalidatePath("/portal");
+    redirect("/portal");
   }
 
   return result;

@@ -8,7 +8,7 @@ interface LinkAsButton extends ButtonProps {
 
 export const ButtonAsLink = ({ href = "", replace, children, ...props }: LinkAsButton) => {
     return (
-        <Button {...props} asChild>
+        <Button {...props} asChild type="button">
             <Link href={href} replace={replace}>
                 {children}
             </Link>

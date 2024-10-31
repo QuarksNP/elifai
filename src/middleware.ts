@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { refreshSession } from './modules/auth/lib/session';
  
-const protectedRoutes = ['/dashboard']
+const protectedRoutes = ['/portal']
 const publicRoutes = ['/sign-in', '/(.)sign-in', '/sign-up', '/(.)sign-up', '/']
  
 export default async function middleware(req: NextRequest) {
@@ -21,9 +21,9 @@ export default async function middleware(req: NextRequest) {
   if (
     isPublicRoute &&
     session &&
-    !req.nextUrl.pathname.startsWith('/dashboard')
+    !req.nextUrl.pathname.startsWith('/portal')
   ) {
-    return NextResponse.redirect(new URL('/dashboard', req.nextUrl))
+    return NextResponse.redirect(new URL('/portal', req.nextUrl))
   }
  
   return res

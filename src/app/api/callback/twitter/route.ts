@@ -49,7 +49,6 @@ export async function GET(req: NextRequest) {
       (await prisma.user.create({
         data: {
           twitterId: user.data.id,
-          username: user.data.username,
           fullname: user.data.name,
         },
 

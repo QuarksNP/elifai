@@ -14,16 +14,32 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model User {
   id        String   @id @default(uuid())
-  googleId  String?   @unique
-  twitterId String?   @unique
-  username  String?   @unique
-  email     String?   @unique
+  googleId  String?  @unique
+  twitterId String?  @unique
+  username  String?  @unique
+  email     String?  @unique
   fullname  String
   password  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  role      Role     @default(USER)
+  posts     Post[]
+}
 
-  @@unique([username, email])
+model Post {
+  id        String   @id @default(cuid())
+  title     String   @unique
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
 }

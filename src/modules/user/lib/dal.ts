@@ -1,7 +1,6 @@
 "server-only";
 
-import { protect } from "@/modules/auth/lib/dal";
-
+import { authentication } from "@/modules/auth/lib/decorators";
 import prisma from "@/modules/core/lib/prisma";
 import { cache } from "react";
 
@@ -64,7 +63,7 @@ class User {
     }
   }
 
-  @protect
+  @authentication
   static async getUser(userId: string) {
     try {
       const user = await prisma.user.findUniqueOrThrow({

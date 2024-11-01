@@ -12,7 +12,7 @@ import { comparePassword, hashPassword } from "./encrypt-password";
 
 import type { SignInRequest, UserCreateInput } from "../types";
 
-export const __VERIFY_SESSION__ = cache(async () => {
+export const _verifySession= cache(async () => {
   const session = await getSession();
 
   if (!session) {
@@ -24,26 +24,6 @@ export const __VERIFY_SESSION__ = cache(async () => {
     userId: session.userId,
   };
 });
-
-export function protect(
-  _: unknown,
-  propertyKey: string,
-  descriptor: PropertyDescriptor
-) {
-  const originalMethod = descriptor.value;
-
-  descriptor.value = async function (...args: unknown[]) {
-    const { isAuthenticated } = await __VERIFY_SESSION__();
-
-    if (!isAuthenticated) {
-      throw new Error(`Unauthorized, cannot execute ${propertyKey}`);
-    }
-
-    return originalMethod.apply(this, args);
-  };
-
-  return descriptor;
-}
 
 class Auth {
   static async signIn(data: SignInRequest) {
@@ -87,34 +67,38 @@ class Auth {
 
       const hashedPassword = await hashPassword(data.password);
 
-      const usernameExists =
-        (await prisma.user.findFirst({
-          where: {
-            username: data.username,
-          },
+      const usernameExists = await prisma.user.findFirst({
+        where: {
+          username: data.username,
+        },
 
-          select: {
-            username: true,
-          }
-        }));
+        select: {
+          username: true,
+        },
+      });
 
       if (usernameExists) {
-        return { success: false, errors: `${usernameExists.username} already exists` };
+        return {
+          success: false,
+          errors: `${usernameExists.username} already exists`,
+        };
       }
 
-      const emailExists =
-        (await prisma.user.findFirst({
-          where: {
-            email: data.email,
-          },
+      const emailExists = await prisma.user.findFirst({
+        where: {
+          email: data.email,
+        },
 
-          select: {
-            email: true,
-          }
-        }));
+        select: {
+          email: true,
+        },
+      });
 
       if (emailExists) {
-        return { success: false, errors: `${emailExists.email} already exists` };
+        return {
+          success: false,
+          errors: `${emailExists.email} already exists`,
+        };
       }
 
       const user = await prisma.user.create({

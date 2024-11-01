@@ -74,6 +74,7 @@ class User {
           id: true,
           fullname: true,
           createdAt: true,
+          role: true,
         },
       });
 

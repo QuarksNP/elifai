@@ -17,7 +17,7 @@ export const Navigation = () => {
     const pathname = usePathname()
 
     return (
-        <nav className="flex flex-row fixed bottom-0 border-t border-muted w-full py-4 px-8 justify-between gap-2 left-0 md:relative md:border-none md:p-0 md:justify-normal md:bottom-auto md:w-auto">
+        <nav className="flex flex-row fixed bottom-0 border-t border-muted z-10 bg-black w-full py-4 px-8 justify-between gap-2 left-0 md:relative md:border-none md:p-0 md:justify-normal md:bottom-auto md:w-auto">
             {NAVIGATION.map(({ name, href, icon }, i) => (
                 <ButtonAsLink
                     key={href + i}

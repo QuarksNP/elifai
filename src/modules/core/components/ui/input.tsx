@@ -13,16 +13,17 @@ export interface InputProps
     extends React.InputHTMLAttributes<HTMLInputElement> {
     icon?: keyof typeof icons
     password?: boolean
+    containerClassName?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, icon, type, password, ...props }, ref) => {
+    ({ className, icon, type, password, containerClassName, ...props }, ref) => {
 
         const [show, onClick] = useClick(true);
 
         return (
             <Label className={cn(
-                "flex items-center h-9 w-full rounded border border-input text-sm shadow-sm transition-colors has-[:focus]:border-primary", {
+                "flex items-center h-9 w-full rounded border border-input text-sm shadow-sm transition-colors has-[:focus]:border-primary", containerClassName, {
                 "pl-3": icon,
                 "px-3": password
             }

@@ -19,6 +19,19 @@ enum Role {
   ADMIN
 }
 
+enum PostCategory {
+  INVESTMENTS
+  SAVINGS
+  DEBT
+  FINANCIAL_EDUCATION
+  RETIREMENT
+  TAXES
+  FINTECH
+  ENTREPRENEURSHIP
+  PERSONAL_FINANCE
+  ECONOMY
+}
+
 model User {
   id        String   @id @default(uuid())
   googleId  String?  @unique
@@ -34,12 +47,13 @@ model User {
 }
 
 model Post {
-  id        String   @id @default(cuid())
-  title     String   @unique
+  id        String        @id @default(cuid())
+  title     String        @unique
   content   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime      @default(now())
+  category  PostCategory?
+  updatedAt DateTime      @updatedAt
+  published Boolean       @default(false)
+  author    User          @relation(fields: [authorId], references: [id])
   authorId  String
 }

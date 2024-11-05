@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
         return (
             <Label className={cn(
-                "flex items-center h-9 w-full rounded border border-input text-sm shadow-sm transition-colors has-[:focus]:border-primary", containerClassName, {
+                "flex items-center h-9 w-full rounded border border-border bg-card text-sm shadow-sm transition-colors has-[:focus]:border-primary", containerClassName, {
                 "pl-3": icon,
                 "px-3": password
             }

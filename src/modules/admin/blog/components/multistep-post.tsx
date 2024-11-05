@@ -2,19 +2,29 @@
 
 import { useHandlePosts } from "../hooks/use-handle-posts";
 import { PostContentEditor } from "./post-content-editor";
-import { PostTitle } from "./post-title";
+import { PostPreview } from "./post-preview";
+import { PostHeader } from "./post-header";
+import { PublishPost } from "./publish-post";
 
 export const MultistepPost = () => {
-    const { currentStep } = useHandlePosts();
+    const { currentStep, post } = useHandlePosts();
 
-    console.log(currentStep);
+    console.log(post.title)
 
     if (currentStep === 0) {
         return (
             <>
-                <PostTitle />
+                <PostHeader />
                 <PostContentEditor />
             </>
+        )
+    } else if (currentStep === 1) {
+        return (
+            <PostPreview />
+        )
+    } else if (currentStep === 2) {
+        return (
+            <PublishPost />
         )
     }
 

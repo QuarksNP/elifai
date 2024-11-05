@@ -1,33 +1,31 @@
 'use client'
 
-import { Button } from "@/modules/core/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/modules/core/components/ui/dialog"
+import { Icon } from "@/modules/core/components/ui/icon";
 import { useHandlePosts } from "../hooks/use-handle-posts";
+import { Badge } from "@/modules/core/components/ui/badge";
+import { Card } from "@/modules/core/components/ui/card";
+import { Blockquote } from "@/modules/core/components/ui/blockquote";
 
 export const PostPreview = () => {
-    const { title, content } = useHandlePosts();
+    const { post: { title, content, category } } = useHandlePosts();
+
+    const formattedCategory = (category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()).replaceAll('_', ' ');
 
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <Button 
-                    className="rounded-xl"
-                    disabled={!title || !content}
-                >Preview
-            </Button>
-            </DialogTrigger>
-            <DialogContent className="bg-black border border-muted overflow-y-auto max-h-[80%] max-w-[90%]">
-                <div className="max-w-screen-sm w-full mx-auto space-y-8">
-                    <DialogHeader className="text-start">
-                        <DialogTitle className="text-3xl">{title}</DialogTitle>
-                        <DialogDescription>Date and time of creation</DialogDescription>
-                    </DialogHeader>
-                    <div
-                        dangerouslySetInnerHTML={{ __html: content }}
-                        className="whitespace-pre-line"
-                    />
-                </div>
-            </DialogContent>
-        </Dialog>
+        <Card className="border-0 bg-transparent md:bg-card md:border md:border-border md:space-y-8 md:p-8">
+            <div className="flex flex-col gap-8 grow overflow-auto max-w-screen-md w-full mx-auto">
+                <Blockquote className="text-sm text-muted-foreground rounded">Make sure to preview your post before publishing</Blockquote>
+                <header className="space-y-2">
+                    <h2 className="text-3xl font-bold">{title}</h2>
+                    <div className="flex items-center">
+                        <time className="text-muted-foreground">{new Date().toDateString()}</time>
+                        <Icon name="Dot" />
+                        <Badge>{formattedCategory}</Badge>
+                    </div>
+                </header>
+
+                <div dangerouslySetInnerHTML={{ __html: content.html }} />
+            </div>
+        </Card>
     )
 }

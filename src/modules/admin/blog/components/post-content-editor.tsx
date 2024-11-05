@@ -11,6 +11,7 @@ import React from 'react';
 import { useChangeText } from '../hooks/use-change-text'
 import { type Editor, EditorContent } from '@tiptap/react'
 import { useHandlePosts } from '../hooks/use-handle-posts'
+import { Blockquote } from "@/modules/core/components/ui/blockquote"
 
 const MenuBar = ({ editor }: { editor?: Editor | null }) => {
     const { handleChange, value } = useChangeText(editor);
@@ -96,8 +97,8 @@ export const PostContentEditor = () => {
 
     return (
         <Card className='p-4 space-y-4'>
-            <h2 className="text-3xl">Content</h2>
             <MenuBar editor={editor} />
+            <Blockquote className="text-sm text-muted-foreground rounded">Your content need to be at least 100 characters long</Blockquote>
             <EditorContent editor={editor} />
         </Card>
     )

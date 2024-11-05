@@ -6,6 +6,7 @@ import { useMediaQuery } from "@/modules/core/hooks/use-media-query";
 import { cn } from "@/modules/core/lib/cn";
 import React from "react";
 import { useHandlePosts } from "../hooks/use-handle-posts";
+import { Icon } from "@/modules/core/components/ui/icon";
 
 const STEPS = [
     {
@@ -24,7 +25,7 @@ const STEPS = [
 
 export const PostSteps = () => {
     const isDesktop = useMediaQuery("(min-width: 768px)")
-    
+
     const { currentStep } = useHandlePosts();
 
     if (isDesktop) {
@@ -38,12 +39,16 @@ export const PostSteps = () => {
                                     "opacity-50": step > currentStep,
                                     "font-bold": step === currentStep,
                                 })}>
-                                    <div 
+                                    <div
                                         className={cn("rounded-full w-10 h-10 border border-muted-foreground flex justify-center items-center group-hover:border-primary", {
                                             "bg-primary border-none": step === currentStep,
+                                            "bg-primary/50 border-none": step < currentStep,
                                         })}
                                     >
-                                        <span>{step + 1}</span>
+                                        {step < currentStep
+                                            ? <Icon name="Check" size={16} />
+                                            : <span>{step + 1}</span>
+                                        }
                                     </div>
                                     <span>{name}</span>
                                 </div>

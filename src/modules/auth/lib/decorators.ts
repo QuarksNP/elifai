@@ -3,26 +3,6 @@ import { _verifySession } from "./dal";
 import prisma from "@/modules/core/lib/prisma";
 import { AuthError } from "../errors/auth_error";
 
-export function authentication(
-  _target: unknown,
-  _propertyKey: string,
-  descriptor: PropertyDescriptor
-) {
-  const originalMethod = descriptor.value;
-
-  descriptor.value = async function (...args: unknown[]) {
-    const { isAuthenticated } = await _verifySession();
-
-    if (!isAuthenticated) {
-      throw new AuthError("Unauthorized, cannot execute", 403);
-    }
-
-    return originalMethod.apply(this, args);
-  };
-
-  return descriptor;
-}
-
 export function authorization(role: Role) {
   return (
     _target: unknown,
@@ -34,7 +14,7 @@ export function authorization(role: Role) {
     descriptor.value = async function (...args: unknown[]) {
       const { isAuthenticated, userId } = await _verifySession();
 
-      if (!isAuthenticated) {
+      if (!isAuthenticated || !userId) {
         throw new AuthError("Unauthorized, cannot execute", 403);
       }
 
@@ -64,7 +44,6 @@ export function authorization(role: Role) {
         if (error instanceof AuthError) {
           throw error;
         }
-
         throw new AuthError("Ups, something went wrong...", 500);
       }
     };

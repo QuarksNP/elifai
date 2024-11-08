@@ -1,6 +1,5 @@
 import "server-only";
 
-import { authentication } from "@/modules/auth/lib/decorators";
 import prisma from "@/modules/core/lib/prisma";
 import { cache } from "react";
 
@@ -14,11 +13,12 @@ class User {
         };
       }
 
-      const userExists = await prisma.user.count({
-        where: {
-          username,
-        },
-      }) > 0;
+      const userExists =
+        (await prisma.user.count({
+          where: {
+            username,
+          },
+        })) > 0;
 
       if (userExists) {
         return {
@@ -43,11 +43,12 @@ class User {
         };
       }
 
-      const userExists = await prisma.user.count({
-        where: {
-          email,
-        },
-      }) > 0;
+      const userExists =
+        (await prisma.user.count({
+          where: {
+            email,
+          },
+        })) > 0;
 
       if (userExists) {
         return {
@@ -63,7 +64,6 @@ class User {
     }
   }
 
-  @authentication
   static async getUser(userId: string) {
     try {
       const user = await prisma.user.findUniqueOrThrow({

@@ -1,12 +1,11 @@
 import "server-only";
 
-import { authentication, authorization } from "@/modules/auth/lib/decorators";
+import { authorization } from "@/modules/auth/lib/decorators";
 import prisma from "@/modules/core/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { cache } from "react";
 
 class Blog {
-  @authentication
   @authorization("ADMIN")
   static async getPosts(adminId: string) {
     try {
@@ -44,7 +43,6 @@ class Blog {
     }
   }
 
-  @authentication
   @authorization("ADMIN")
   static async createPost(data: Prisma.PostCreateInput) {
     try {

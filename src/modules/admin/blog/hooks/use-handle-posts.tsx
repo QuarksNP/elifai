@@ -49,7 +49,7 @@ export const useHandlePosts = () => {
         editorProps: {
             attributes: {
                 class: cn("bg-popover p-4 rounded-xl outline-none focus:outline-primary focus:outline-offset-2 h-96 overflow-auto", {
-                    "outline-destructive/50 focus:outline-destructive": errors.content
+                    "outline-destructive/50 focus:outline-destructive": errors?.content
                 }),
             },
             handleKeyDown: (_, event) => {
@@ -62,11 +62,12 @@ export const useHandlePosts = () => {
             }
         },
         onUpdate: ({ editor }) => {
-            setPost({ content: { html: editor.getHTML(), text: editor.getText() } } as Post);
+            setPost({ ...post, content: { html: editor.getHTML(), text: editor.getText() } } as Post);
         },
     })
 
     const [openDialog, setOpenDialog] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!isSuccess) {
@@ -79,7 +80,7 @@ export const useHandlePosts = () => {
             return;
         }
 
-        setPost({ [key]: value } as unknown as Post);
+        setPost({ ...post, [key]: value } as unknown as Post);
     }
 
     function handleSteps({ next = false, previous = false }: { next?: boolean, previous?: boolean }) {
@@ -95,28 +96,34 @@ export const useHandlePosts = () => {
     }
 
     async function handleSubmit() {
+        setIsLoading(true);
         try {
             const result = await createPost({
                 ...post,
                 content: post.content.html,
             });
 
-            if (result?.success === false || result?.errors) {
-                toast.error(result.errors?.toString(), {
-                    description: "Please review your inputs and try again",
-                    duration: 5000,
+            if (result.success === false || result?.errors) {
+                toast.error("Validation error", {
+                    description: errors?.toString(),
+                    duration: 8000,
                 });
             } else {
                 toast.success("Your post has been published successfully");
+                editor?.destroy();
                 setReset();
             }
 
         } catch (error) {
             if (error instanceof Error) {
-                toast.error(error.message);
+                toast.error(error.message, {
+                    description: "Please review your inputs and try again",
+                    duration: 8000,
+                });
                 setSteps(0);
             }
         } finally {
+            setIsLoading(false);
             setOpenDialog(false);
         }
     }
@@ -127,6 +134,7 @@ export const useHandlePosts = () => {
         handleSubmit,
         editor,
         errors,
+        isLoading,
         isSuccess,
         post,
         handleOpenDialog,

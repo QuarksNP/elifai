@@ -23,7 +23,7 @@ export const createPost = async (post: {
   const validation = PostSchema.safeParse(post);
 
   if (!validation.success) {
-    return { success: false, errors: validation.error };
+    return { success: false, errors: validation.error.flatten().fieldErrors };
   }
 
   const result = await Blog.createPost({

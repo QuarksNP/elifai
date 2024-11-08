@@ -5,9 +5,10 @@ import { useHandlePosts } from "../hooks/use-handle-posts";
 import { Badge } from "@/modules/core/components/ui/badge";
 import { Button } from "@/modules/core/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/modules/core/components/ui/dialog";
+import { ButtonLoading } from "@/modules/core/components/button-loading";
 
 export const PublishPost = () => {
-    const { post, handleSubmit, openDialog, handleOpenDialog } = useHandlePosts();
+    const { post, handleSubmit, openDialog, handleOpenDialog, isLoading } = useHandlePosts();
 
     return (
         <Card>
@@ -37,7 +38,10 @@ export const PublishPost = () => {
                             <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
                             </DialogClose>
-                            <Button type="button" onClick={async () => await handleSubmit()}>Publish</Button>
+                            {isLoading
+                                ? <ButtonLoading text="Publishing..." />
+                                : <Button type="button" onClick={async () => await handleSubmit()}>Publish</Button>
+                            }
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

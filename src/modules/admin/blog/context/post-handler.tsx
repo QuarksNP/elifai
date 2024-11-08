@@ -19,7 +19,7 @@ type State = {
         title?: string[];
         category?: string[];
         content?: string[];
-    };
+    } | null;
 }
 
 type Action =
@@ -37,22 +37,24 @@ const initialState: State = {
         category: "INVESTMENTS",
     },
     isSuccess: false,
-    errors: {},
+    errors: null,
     step: 0,
 };
 
 const reducer = (state: State, action: Action): State => {
+    console.log(action)
     switch (action.type) {
         case "SET_POST": {
             const validation = PostSchema.safeParse({
-                ...state.post,
-                content: state.post.content.text,
+                ...action.payload,
+                content: action.payload.content.text,
             });
+
             return {
                 ...state,
                 post: { ...state.post, ...action.payload },
                 isSuccess: validation.success,
-                errors: validation.success ? {} : validation.error.flatten().fieldErrors,
+                errors: validation.success ? null : validation.error.flatten().fieldErrors,
             };
         }
         case "SET_STEPS":

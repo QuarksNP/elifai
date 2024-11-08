@@ -19,7 +19,7 @@ export const PostHeader = () => {
                     defaultValue={title}
                     onChange={(e) => handlePost({ key: "title", value: e.currentTarget.value })}
                     containerClassName={cn({
-                        "border-destructive/50 has-[:focus]:border-destructive": errors.title
+                        "border-destructive/50 has-[:focus]:border-destructive": errors?.title
                     })}
                 />
                 <Blockquote className="text-sm text-muted-foreground rounded">Your tittle need to be at least 5 characters long</Blockquote>

@@ -1,7 +1,6 @@
 'use client';
 
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator, BreadcrumbPage } from "@/modules/core/components/breadcroump";
-import { Card, CardContent } from "@/modules/core/components/ui/card";
 import { useMediaQuery } from "@/modules/core/hooks/use-media-query";
 import { cn } from "@/modules/core/lib/cn";
 import React from "react";
@@ -31,31 +30,27 @@ export const PostSteps = () => {
     if (isDesktop) {
         return (
             <aside>
-                <Card>
-                    <CardContent>
-                        <nav className="flex flex-col justify-center gap-4 p-4">
-                            {STEPS.map(({ step, name }, i) => (
-                                <div key={i} className={cn("flex items-center text-lg gap-4", {
-                                    "opacity-50": step > currentStep,
-                                    "font-bold": step === currentStep,
-                                })}>
-                                    <div
-                                        className={cn("rounded-full w-10 h-10 border border-muted-foreground flex justify-center items-center group-hover:border-primary", {
-                                            "bg-primary border-none": step === currentStep,
-                                            "bg-primary/50 border-none": step < currentStep,
-                                        })}
-                                    >
-                                        {step < currentStep
-                                            ? <Icon name="Check" size={16} />
-                                            : <span>{step + 1}</span>
-                                        }
-                                    </div>
-                                    <span>{name}</span>
-                                </div>
-                            ))}
-                        </nav>
-                    </CardContent>
-                </Card>
+                <nav className="flex gap-8 p-4">
+                    {STEPS.map(({ step, name }, i) => (
+                        <div key={i} className={cn("flex items-center text-lg gap-4", {
+                            "opacity-50": step > currentStep,
+                            "font-bold": step === currentStep,
+                        })}>
+                            <div
+                                className={cn("rounded-full w-10 h-10 border border-muted-foreground flex justify-center items-center group-hover:border-primary", {
+                                    "bg-primary border-none": step === currentStep,
+                                    "bg-primary/50 border-none": step < currentStep,
+                                })}
+                            >
+                                {step < currentStep
+                                    ? <Icon name="Check" size={16} />
+                                    : <span>{step + 1}</span>
+                                }
+                            </div>
+                            <span>{name}</span>
+                        </div>
+                    ))}
+                </nav>
             </aside>
         )
     }

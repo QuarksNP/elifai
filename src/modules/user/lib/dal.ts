@@ -1,4 +1,4 @@
-"server-only";
+import "server-only";
 
 import { authentication } from "@/modules/auth/lib/decorators";
 import prisma from "@/modules/core/lib/prisma";

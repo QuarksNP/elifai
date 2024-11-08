@@ -7,9 +7,7 @@ import { PostHeader } from "./post-header";
 import { PublishPost } from "./publish-post";
 
 export const MultistepPost = () => {
-    const { currentStep, post } = useHandlePosts();
-
-    console.log(post.title)
+    const { currentStep } = useHandlePosts();
 
     if (currentStep === 0) {
         return (

@@ -7,7 +7,7 @@ import { Button } from "@/modules/core/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/modules/core/components/ui/dialog";
 
 export const PublishPost = () => {
-    const { post } = useHandlePosts();
+    const { post, handleSubmit, openDialog, handleOpenDialog } = useHandlePosts();
 
     return (
         <Card>
@@ -24,7 +24,7 @@ export const PublishPost = () => {
                 <time className="text-sm text-muted-foreground mt-4">{new Date().toDateString()}</time>
             </CardContent>
             <CardFooter className="flex items-center justify-end gap-4 p-6">
-                <Dialog>
+                <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
                     <DialogTrigger asChild>
                         <Button size="lg" variant="outline">Publish</Button>
                     </DialogTrigger>
@@ -37,7 +37,7 @@ export const PublishPost = () => {
                             <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
                             </DialogClose>
-                            <Button>Publish</Button>
+                            <Button type="button" onClick={async () => await handleSubmit()}>Publish</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

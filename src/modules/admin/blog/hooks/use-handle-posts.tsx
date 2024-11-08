@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Post, PostHandlerContext } from "../context/post-handler";
 
 import { useEditor } from "@tiptap/react";
@@ -10,6 +10,8 @@ import StarterKit from '@tiptap/starter-kit'
 import HardBreak from "@tiptap/extension-hard-break";
 import Placeholder from '@tiptap/extension-placeholder'
 import { cn } from "@/modules/core/lib/cn";
+import { createPost } from "../actions/create-post";
+import { toast } from "sonner";
 
 const extensions = [
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -39,7 +41,7 @@ const extensions = [
 ];
 
 export const useHandlePosts = () => {
-    const { post, errors, step, setPost, setSteps, isSuccess } = useContext(PostHandlerContext);
+    const { post, errors, step, setPost, setSteps, setReset, isSuccess } = useContext(PostHandlerContext);
 
     const editor = useEditor({
         extensions,
@@ -64,6 +66,8 @@ export const useHandlePosts = () => {
         },
     })
 
+    const [openDialog, setOpenDialog] = useState(false);
+
     useEffect(() => {
         if (!isSuccess) {
             setSteps(0);
@@ -86,13 +90,47 @@ export const useHandlePosts = () => {
         }
     }
 
+    function handleOpenDialog(open: boolean) {
+        setOpenDialog(open);
+    }
+
+    async function handleSubmit() {
+        try {
+            const result = await createPost({
+                ...post,
+                content: post.content.html,
+            });
+
+            if (result?.success === false || result?.errors) {
+                toast.error(result.errors?.toString(), {
+                    description: "Please review your inputs and try again",
+                    duration: 5000,
+                });
+            } else {
+                toast.success("Your post has been published successfully");
+                setReset();
+            }
+
+        } catch (error) {
+            if (error instanceof Error) {
+                toast.error(error.message);
+                setSteps(0);
+            }
+        } finally {
+            setOpenDialog(false);
+        }
+    }
+
     return {
         handlePost,
         handleSteps,
+        handleSubmit,
         editor,
         errors,
         isSuccess,
         post,
+        handleOpenDialog,
+        openDialog,
         currentStep: step,
     }
 }

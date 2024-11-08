@@ -1,9 +1,6 @@
-import { Logo } from "@/modules/core/components/logo";
-
 import { getUserById } from "@/modules/user/actions/get-user-by-id";
 import { Navigation as UserNavigation } from "@/modules/user/components/navigation";
 import { Navigation as AdminNavigation } from "@/modules/admin/components/navigation";
-import { Profile } from "@/modules/user/components/profile";
 
 export default async function PortalLayout({ user, admin }: { user: React.ReactNode, admin: React.ReactNode }) {
     const response = await getUserById();

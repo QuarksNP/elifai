@@ -22,6 +22,7 @@ export const _verifySession= cache(async () => {
   return {
     isAuthenticated: true,
     userId: session.userId,
+    expires: session.expires,
   };
 });
 

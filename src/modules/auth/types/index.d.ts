@@ -2,7 +2,7 @@ import type { Prisma } from "@prisma/client";
 
 export type Session = {
   userId: string;
-  expires: number;
+  expires: string | Date;
 };
 
 export type SignInRequest = {

@@ -38,7 +38,7 @@ export const setSession = async (data: { userId: string }) => {
   const session = await getIronSession<Session>(cookies(), SESSION_OPTIONS);
 
   session.userId = data.userId;
-  session.expires = Date.now() + TTL * 1000;
+  session.expires = new Date(Date.now() + TTL * 1000);
 
   await session.save();
 
@@ -56,11 +56,16 @@ export const refreshSession = async (
     return res;
   }
 
-  const parsed: Session = await unsealData(session, {
+  const unparsed: Session = await unsealData(session, {
     password: process.env.SESSION_SECRET as string,
   });
 
-  if (Date.now() >= parsed.expires) {
+  const expiresAt =
+    typeof unparsed.expires === "string"
+      ? new Date(unparsed.expires)
+      : unparsed.expires;
+
+  if (Date.now() >= expiresAt.getTime()) {
     res.cookies.delete({
       name: SESSION_NAME,
       path: "/",
@@ -69,15 +74,17 @@ export const refreshSession = async (
     return res;
   }
 
-  parsed.expires = Date.now() + TTL * 1000;
+  unparsed.expires = new Date(Date.now() + TTL * 1000);
+
+  const parsed = await sealData(unparsed, {
+    password: process.env.SESSION_SECRET as string,
+    ttl: TTL,
+  });
 
   res.cookies.set({
     ...SESSION_OPTIONS.cookieOptions,
     name: SESSION_NAME,
-    value: await sealData(parsed, {
-      password: process.env.SESSION_SECRET as string,
-      ttl: TTL,
-    }),
+    value: parsed,
   });
 
   return res;

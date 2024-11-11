@@ -18,8 +18,8 @@ export const signUp = async (user: UserCreateInput) => {
   const result = await Auth.signUp(user);
 
   if (result.success) {
-    revalidatePath("/dashboard");
-    redirect("/dashboard");
+    revalidatePath("/portal");
+    redirect("/portal");
   }
 
   return result;

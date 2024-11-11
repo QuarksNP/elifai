@@ -6,7 +6,6 @@ import { cn } from "../../lib/cn"
 import { icons } from "lucide-react"
 import { Label } from "./label"
 import { Icon } from "./icon"
-import { Button } from "./button"
 import { useClick } from "../../hooks/use-click"
 
 export interface InputProps
@@ -25,7 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             <Label className={cn(
                 "flex items-center h-9 w-full rounded border border-border bg-card text-sm shadow-sm transition-colors has-[:focus]:border-primary", containerClassName, {
                 "pl-3": icon,
-                "px-3": password
+                "pr-3": password,
             }
             )}>
                 {icon && <Icon name={icon} />}
@@ -33,15 +32,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     type={(show && password) ? "password" : type}
                     className={cn(
                         "flex px-3 bg-transparent py-1 h-full placeholder:text-muted-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full",
-                        className
+                        className,
                     )}
                     ref={ref}
                     {...props}
                 />
                 {password && (
-                    <Button
-                        variant="ghost"
-                        size="none"
+                    <button
                         type="button"
                         onClick={onClick}
                     >
@@ -51,7 +48,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                                 "text-muted-foreground": show
                             })}
                         />
-                    </Button>
+                    </button>
                 )}
             </Label>
         )

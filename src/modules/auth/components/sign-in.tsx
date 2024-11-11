@@ -59,11 +59,13 @@ export const SignIn = () => {
     return (
         <Drawer open onOpenChange={handleGoBack}>
             <DrawerContent className="max-h-full">
-                <DrawerHeader>
-                    <DrawerTitle>Sign in to Elifai</DrawerTitle>
-                </DrawerHeader>
-
                 <ScrollArea className="overflow-auto">
+                    <DrawerHeader>
+                        <div className="flex items-center gap-2 ">
+                            <DrawerTitle>Sign into</DrawerTitle>
+                            <Logo width={100} height={100} />
+                        </div>
+                    </DrawerHeader>
                     <div className="w-full flex flex-col gap-4">
                         <GoogleButton />
                         <TwitterButton />
@@ -77,21 +79,23 @@ export const SignIn = () => {
 
                         <Button variant="outline" className="my-4">Forgot password?</Button>
                     </div>
-                </ScrollArea>
 
-                <DrawerFooter>
-                    <div className="flex items-center gap-2 mr-auto">
-                        <span>Don&apos;t have an account?</span>
-                        <ButtonAsLink
-                            variant="link"
-                            size="none"
-                            href="/sign-up"
-                            replace
-                        >
-                            Sign up
-                        </ButtonAsLink>
-                    </div>
-                </DrawerFooter>
+                    <DrawerFooter>
+                        <div className="flex items-center gap-2 mr-auto">
+                            <span>Don&apos;t have an account?
+                                <ButtonAsLink
+                                    variant="link"
+                                    size="none"
+                                    href="/sign-up"
+                                    replace
+                                    className="ml-2"
+                                >
+                                    Sign up
+                                </ButtonAsLink>
+                            </span>
+                        </div>
+                    </DrawerFooter>
+                </ScrollArea>
             </DrawerContent>
         </Drawer>
     )

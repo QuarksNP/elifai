@@ -28,15 +28,16 @@ export const SignUp = () => {
 
                     <DialogFooter>
                         <div className="flex items-center gap-2 mr-auto">
-                            <span>Do you already have an account?</span>
-                            <ButtonAsLink
-                                variant="link"
-                                size="none"
-                                href="/sign-in"
-                                replace
-                            >
-                                Sign in
-                            </ButtonAsLink>
+                            <span>Do you already have an account?
+                                <ButtonAsLink
+                                    variant="link"
+                                    size="none"
+                                    href="/sign-in"
+                                    replace
+                                >
+                                    Sign in
+                                </ButtonAsLink>
+                            </span>
                         </div>
                     </DialogFooter>
                 </DialogContent>
@@ -47,32 +48,34 @@ export const SignUp = () => {
     return (
         <Drawer open onOpenChange={handleGoBack}>
             <DrawerContent className="max-h-full">
-                <DrawerHeader>
-                    <div className="flex items-center gap-2 justify-center">
-                        <DrawerTitle>Sign up on</DrawerTitle>
-                        <Logo width={75} height={75} />
-                    </div>
-                </DrawerHeader>
-
                 <ScrollArea className="overflow-auto">
+                    <DrawerHeader>
+                        <div className="flex items-center gap-2 ">
+                            <DrawerTitle>Sign up on</DrawerTitle>
+                            <Logo width={100} height={100} />
+                        </div>
+                    </DrawerHeader>
+
                     <div className="w-full flex flex-col gap-4">
                         <SignUpForm />
                     </div>
-                </ScrollArea>
 
-                <DrawerFooter>
-                    <div className="flex items-center gap-2 mr-auto">
-                        <span>Do you already have an account?</span>
-                        <ButtonAsLink
-                            variant="link"
-                            size="none"
-                            href="/sign-in"
-                            replace
-                        >
-                            Sign in
-                        </ButtonAsLink>
-                    </div>
-                </DrawerFooter>
+                    <DrawerFooter>
+                        <div className="flex items-center gap-2 mr-auto">
+                            <span>Do you already have an account?
+                                <ButtonAsLink
+                                    variant="link"
+                                    size="none"
+                                    href="/sign-in"
+                                    replace
+                                    className="ml-2"
+                                >
+                                    Sign in
+                                </ButtonAsLink>
+                            </span>
+                        </div>
+                    </DrawerFooter>
+                </ScrollArea>
             </DrawerContent>
         </Drawer>
     )

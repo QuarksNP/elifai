@@ -42,7 +42,6 @@ const initialState: State = {
 };
 
 const reducer = (state: State, action: Action): State => {
-    console.log(action)
     switch (action.type) {
         case "SET_POST": {
             const validation = PostSchema.safeParse({

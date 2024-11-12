@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { Post, PostHandlerContext } from "../context/post-handler";
 
-import { useEditor } from "@tiptap/react";
+import { Extension, useEditor } from "@tiptap/react";
 import { Color } from '@tiptap/extension-color'
 import ListItem from '@tiptap/extension-list-item'
 import TextStyle from '@tiptap/extension-text-style'
@@ -9,11 +9,29 @@ import Heading from '@tiptap/extension-heading'
 import StarterKit from '@tiptap/starter-kit'
 import HardBreak from "@tiptap/extension-hard-break";
 import Placeholder from '@tiptap/extension-placeholder'
+import Document from '@tiptap/extension-document'
 import { cn } from "@/modules/core/lib/cn";
 import { createPost } from "../actions/create-post";
 import { toast } from "sonner";
+import Paragraph from "@tiptap/extension-paragraph";
+
+const KeyboardHandler = Extension.create({
+    name: 'keyboardHandler',
+});
 
 const extensions = [
+    Document,
+    Paragraph,
+    StarterKit.configure({
+        bulletList: {
+            keepMarks: true,
+            keepAttributes: false,
+        },
+        orderedList: {
+            keepMarks: true,
+            keepAttributes: false,
+        },
+    }),
     Color.configure({ types: [TextStyle.name, ListItem.name] }),
     TextStyle.configure(),
     Placeholder.configure({
@@ -25,18 +43,23 @@ const extensions = [
         },
         keepMarks: false,
     }),
-    StarterKit.configure({
-        bulletList: {
-            keepMarks: true,
-            keepAttributes: false,
-        },
-        orderedList: {
-            keepMarks: true,
-            keepAttributes: false,
-        },
-    }),
     Heading.configure({
         levels: [1, 2, 3, 4]
+    }),
+    KeyboardHandler.extend({
+        addKeyboardShortcuts() {
+            return {
+                "Enter": () => {
+
+                    return this.editor.commands.first(({ commands }) => [
+                        () => commands.newlineInCode(),
+                        () => commands.createParagraphNear(),
+                        () => commands.liftEmptyBlock(),
+                        () => commands.splitBlock(),
+                    ]);
+                },
+            };
+        },
     })
 ];
 
@@ -62,7 +85,13 @@ export const useHandlePosts = () => {
             }
         },
         onUpdate: ({ editor }) => {
-            setPost({ ...post, content: { html: editor.getHTML(), text: editor.getText() } } as Post);
+            console.log(editor.getHTML());
+            setPost({
+                ...post, content: {
+                    html: editor.getHTML(),
+                    text: editor.getText(),
+                }
+            } as Post);
         },
     })
 

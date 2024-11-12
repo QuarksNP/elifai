@@ -6,12 +6,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { POST_CATEGORIES } from "../lib/constants/post-categories";
 import { cn } from "@/modules/core/lib/cn";
 import { Blockquote } from "@/modules/core/components/ui/blockquote";
+import { formatUpperCase } from "@/modules/core/lib/format-upper-case";
 
 export const PostHeader = () => {
     const { handlePost, errors, post: { title, category } } = useHandlePosts();
 
     return (
-        <header className="grid gap-4 items-center md:grid-cols-[1fr_40%]">
+        <header className="grid gap-4 items-center md:grid-cols-[1fr_1fr]">
             <div className="space-y-2">
                 <Input
                     name="title"
@@ -22,7 +23,11 @@ export const PostHeader = () => {
                         "border-destructive/50 has-[:focus]:border-destructive": errors?.title
                     })}
                 />
-                <Blockquote className="text-sm text-muted-foreground rounded">Your tittle need to be at least 5 characters long</Blockquote>
+                <Blockquote title="Requirements">
+                    <ul className="list-disc list-inside">
+                        <li>Your tittle need to be at least 5 characters long</li>
+                    </ul>
+                </Blockquote>
             </div>
             <Select
                 name="category"
@@ -33,11 +38,13 @@ export const PostHeader = () => {
                     <SelectTrigger className="md:self-start md:py-0 md:px-3">
                         <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
-                    <Blockquote className="text-sm text-muted-foreground rounded">You must select a category for your post</Blockquote>
+                    <Blockquote title="Note">
+                        <p>Your post will be published on the <b>{formatUpperCase(category)}</b> category</p>
+                    </Blockquote>
                 </div>
                 <SelectContent>
                     {POST_CATEGORIES.map((category) => {
-                        const formattedCategory = (category.charAt(0).toUpperCase() + category.slice(1).toLowerCase()).replaceAll('_', ' ');
+                        const formattedCategory = formatUpperCase(category);
 
                         return (
                             <SelectItem

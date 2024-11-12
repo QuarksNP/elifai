@@ -23,7 +23,6 @@ const NAVIGATION: NavigateOptions[] = [
     {
         name: "Blog",
         href: "/portal/blog",
-        icon: "Newspaper",
         subRoutes: [
             { name: "Your articles", href: "/portal/blog", icon: "Newspaper" },
             { name: "Publish article", href: "/portal/blog/publish", icon: "Pencil" },
@@ -31,19 +30,24 @@ const NAVIGATION: NavigateOptions[] = [
     },
 ];
 
+const COLLAPSIBLE_ITEM_CLASSNAME = "text-sm text-muted-foreground hover:no-underline hover:text-primary-foreground"
+
 const SideBarContent = () => {
     const pathname = usePathname()
     const { isOpen, handleToggle } = useOpenCollapsibles()
 
     return (
-        <aside className="flex flex-col h-full overflow-y-auto p-4 gap-8 md:h-screen md:border-r md:border-border md:p-8">
+        <aside className="flex flex-col h-full overflow-y-auto p-4 gap-8 md:h-screen md:border-r md:border-border md:p-8 text-sm text-muted-foreground">
             {NAVIGATION.map(({ name, href, icon, subRoutes }, i) => {
                 if (!subRoutes) return (
                     <ButtonAsLink
                         href={href}
                         key={href + i}
-                        className="justify-start gap-2"
-                        variant={href === pathname ? "default" : "outline"}
+                        className={cn("justify-start gap-2", COLLAPSIBLE_ITEM_CLASSNAME,{
+                            "text-primary": href === pathname,
+                        })}
+                        variant="link"
+                        size="none"
                     >
                         {icon && <Icon name={icon} />}
                         {name}
@@ -52,33 +56,33 @@ const SideBarContent = () => {
 
                 return (
                     <Collapsible key={href} open={!!isOpen[name]} onOpenChange={() => handleToggle(name)}>
-                        <div className="flex justify-between w-full">
-                            <div className="flex items-center gap-2">
-                                {icon && <Icon name={icon} className="text-primary" />}
-                                <span className="line-clamp-1">{name}</span>
-                            </div>
                             <CollapsibleTrigger asChild>
-                                <Button
-                                    variant="outline"
+                                <ButtonAsLink
+                                    href={subRoutes[0].href}
+                                    variant="link"
                                     size="none"
-                                    className={cn("p-2 rounded-xl", {
-                                        "bg-primary text-foreground": pathname.startsWith(href),
+                                    className={cn("p-2 w-full justify-between", COLLAPSIBLE_ITEM_CLASSNAME,{
+                                        "text-primary": pathname.startsWith(href),
                                     })}
                                 >
+                                    <div className="flex items-center gap-2">
+                                        {icon && <Icon name={icon} className="text-primary" />}
+                                        <span className="line-clamp-1">{name}</span>
+                                    </div>
+
                                     {isOpen[name]
                                         ? <Icon name="ChevronDown" size={16} />
                                         : <Icon name="ChevronRight" size={16} />
                                     }
-                                </Button>
+                                </ButtonAsLink>
                             </CollapsibleTrigger>
-                        </div>
                         <CollapsibleContent className="space-y-2 text-sm text-muted-foreground grow flex-col mt-6">
                             {subRoutes?.map(({ name, href, icon }, i) => (
                                 <ButtonAsLink
                                     key={href + i}
                                     href={href}
-                                    variant="ghost"
-                                    className={cn("flex justify-start gap-2 text-sm text-muted-foreground grow", {
+                                    variant="link"
+                                    className={cn("flex justify-start gap-2", COLLAPSIBLE_ITEM_CLASSNAME, {
                                         "text-primary": href === pathname,
                                     })}
                                 >

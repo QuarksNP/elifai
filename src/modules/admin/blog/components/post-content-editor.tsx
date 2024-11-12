@@ -98,7 +98,11 @@ export const PostContentEditor = () => {
     return (
         <Card className='p-4 space-y-4'>
             <MenuBar editor={editor} />
-            <Blockquote className="text-sm text-muted-foreground rounded">Your content need to be at least 100 characters long</Blockquote>
+            <Blockquote title="Requirements">
+                <ul className="list-disc list-inside">
+                    <li>Your content need to be at least 100 characters long</li>
+                </ul>
+            </Blockquote>
             <EditorContent editor={editor} />
         </Card>
     )

@@ -36,10 +36,31 @@ const initialState: State = {
         },
         category: "INVESTMENTS",
     },
+    step: 0,
     isSuccess: false,
     errors: null,
-    step: 0,
 };
+
+const persistedInitialState = (() => {
+    const persistedState = localStorage.getItem("post-handler-state");
+    if (persistedState) {
+        const parsedState = JSON.parse(persistedState);
+
+        const validation = PostSchema.safeParse({
+            ...parsedState,
+            content: parsedState.content.text,
+        });
+
+        return {
+            post: parsedState,
+            isSuccess: validation.success,
+            errors: validation.success ? null : validation.error.flatten().fieldErrors,
+            step: 0,
+        };
+    }
+
+    return initialState;
+})() as State;
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
@@ -77,24 +98,26 @@ const PostHandlerContext = createContext<{
     setSteps: (step: number) => void;
     setReset: () => void;
 }>({
-    post: {
-        title: "",
-        content: {
-            html: "",
-            text: "",
-        },
-        category: "INVESTMENTS",
-    },
-    errors: {},
-    isSuccess: false,
-    step: 0,
+    ...initialState,
     setPost: () => { },
     setSteps: () => { },
     setReset: () => { },
 });
 
 const PostHandlerProvider = ({ children }: { children: React.ReactNode }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, persistedInitialState);
+
+    function persistState(post: Post) {
+        localStorage.setItem("post-handler-state", JSON.stringify(post));
+
+        dispatch({ type: "SET_POST", payload: post });
+    };
+
+    function resetState() {
+        localStorage.removeItem("post-handler-state");
+
+        dispatch({ type: "SET_RESET" });
+    }
 
     return (
         <PostHandlerContext.Provider
@@ -103,9 +126,9 @@ const PostHandlerProvider = ({ children }: { children: React.ReactNode }) => {
                 step: state.step,
                 errors: state.errors,
                 isSuccess: state.isSuccess,
-                setPost: (post: Post) => dispatch({ type: "SET_POST", payload: post }),
+                setPost: (post: Post) => persistState(post),
+                setReset: () => resetState(),
                 setSteps: (step: number) => dispatch({ type: "SET_STEPS", payload: step }),
-                setReset: () => dispatch({ type: "SET_RESET" }),
             }}
         >
             {children}

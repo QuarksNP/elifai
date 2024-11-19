@@ -74,6 +74,16 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      boxShadow: {
+        neumorphism: `
+          10px 10px 20px hsl(var(--background) / 0.4),
+          -10px -10px 20px hsl(var(--card) / 0.6)
+        `,
+        neumorphismInset: `
+          inset 5px 5px 10px hsl(var(--background) / 0.4),
+          inset -5px -5px 10px hsl(var(--card) / 0.6)
+        `,
+      },
     },
   },
   plugins: [tailwindAnimate],

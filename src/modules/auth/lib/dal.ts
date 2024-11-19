@@ -15,7 +15,7 @@ import type { SignInRequest, UserCreateInput } from "../types";
 export const _verifySession= cache(async () => {
   const session = await getSession();
 
-  if (!session) {
+  if (!session.userId || !session.expires) {
     redirect("/");
   }
 

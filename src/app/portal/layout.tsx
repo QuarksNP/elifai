@@ -6,7 +6,7 @@ export default async function PortalLayout({ user, admin }: { user: React.ReactN
     const response = await getUserById();
 
     return (
-        <main className="grid xl:px-0 md:grid-cols-[30%,1fr] lg:grid-cols-[20%,1fr]">
+        <main className="flex flex-col min-h-screen xl:px-0 md:grid md:h-auto md:grid-cols-[30%,1fr] lg:grid-cols-[20%,1fr]">
             {response.role === "ADMIN" ? <AdminNavigation user={{ fullName: response.fullname }} /> : <UserNavigation />}
 
             {response.role === "ADMIN" ? admin : user}

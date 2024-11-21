@@ -60,6 +60,10 @@ export const refreshSession = async (
     password: process.env.SESSION_SECRET as string,
   });
 
+  if (!unparsed.expires || !unparsed.userId) {
+    return res;
+  }
+
   const expiresAt =
     typeof unparsed.expires === "string"
       ? new Date(unparsed.expires)

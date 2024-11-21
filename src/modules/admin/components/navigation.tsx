@@ -6,7 +6,7 @@ import { Logo } from "@/modules/core/components/logo";
 import { Button } from "@/modules/core/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/modules/core/components/ui/collapsible";
 import { Icon } from "@/modules/core/components/ui/icon";
-import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTrigger } from "@/modules/core/components/ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/modules/core/components/ui/sheet";
 import { useMediaQuery } from "@/modules/core/hooks/use-media-query";
 import { useOpenCollapsibles } from "@/modules/core/hooks/use-open-collapsibles";
 import { cn } from "@/modules/core/lib/cn";
@@ -94,6 +94,7 @@ const SideBarContent = () => {
                     </Collapsible>
                 )
             })}
+            <LogoutBtn className="mt-auto" />
         </aside>
     )
 }
@@ -130,9 +131,6 @@ export const Navigation = ({ user }: { user?: { fullName: string } }) => {
                         </header>
                     </SheetHeader>
                     <SideBarContent />
-                    <SheetFooter className="mt-auto">
-                        <LogoutBtn />
-                    </SheetFooter>
                 </SheetContent>
             </Sheet>
         </header>

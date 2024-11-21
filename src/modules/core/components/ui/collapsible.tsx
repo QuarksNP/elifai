@@ -17,7 +17,7 @@ const CollapsibleContent = React.forwardRef<
         className="flex" 
         {...props}
     >
-        <Separator orientation="vertical" className="m-4 h-auto w-0.5" />
+        <Separator orientation="vertical" className="m-2 h-auto w-0.5" />
         <div className={className}>{children}</div>
     </CollapsiblePrimitive.CollapsibleContent>
 ));

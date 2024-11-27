@@ -47,10 +47,8 @@ class Blog {
   }
 
   @authorization("ADMIN")
-  static async createPost(data: Prisma.PostCreateInput) {
-    console.log(data.title);
+  static async createPost(data: Omit<Prisma.PostCreateInput, "slug">) {
     const slug = slugify(data.title);
-    console.log(slug);
 
     try {
       const post = await prisma.post.create({

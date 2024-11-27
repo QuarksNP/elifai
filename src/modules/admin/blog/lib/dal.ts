@@ -5,6 +5,7 @@ import prisma from "@/modules/core/lib/prisma";
 import { PostCategory, Prisma } from "@prisma/client";
 import { cache } from "react";
 import { AuthError } from "@/modules/auth/errors/auth_error";
+import { slugify } from "@/modules/core/lib/slugify";
 
 class Blog {
   @authorization("ADMIN")
@@ -47,9 +48,16 @@ class Blog {
 
   @authorization("ADMIN")
   static async createPost(data: Prisma.PostCreateInput) {
+    console.log(data.title);
+    const slug = slugify(data.title);
+    console.log(slug);
+
     try {
       const post = await prisma.post.create({
-        data,
+        data: {
+          ...data,
+          slug,
+        },
       });
 
       if (!post) {
@@ -68,7 +76,7 @@ class Blog {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new Error(
-          "Ups, it seems that the post already exists with a unique value"
+          "Ups, it seems that the post already exists with a unique value",
         );
       }
       throw new Error("Ups, something went wrong...");
@@ -88,7 +96,7 @@ class Blog {
       if (!post) {
         throw new AuthError(
           "You don't have permission to delete this post",
-          401
+          401,
         );
       }
 
@@ -146,7 +154,7 @@ class Blog {
     }: {
       search?: string;
       category?: PostCategory;
-    }
+    },
   ) {
     try {
       const posts = await prisma.post.findMany({

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,6 +6,33 @@ datasource db {
   provider  = "postgresql"
   url       = env("POSTGRES_PRISMA_URL")
   directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  googleId  String?  @unique
+  username  String?  @unique
+  email     String?  @unique
+  fullname  String
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  twitterId String?  @unique
+  role      Role     @default(USER)
+  posts     Post[]
+}
+
+model Post {
+  id        String        @id @default(cuid())
+  title     String        @unique
+  content   String
+  createdAt DateTime      @default(now())
+  category  PostCategory?
+  updatedAt DateTime      @updatedAt
+  published Boolean       @default(false)
+  authorId  String
+  slug      String        @unique
+  author    User          @relation(fields: [authorId], references: [id])
 }
 
 enum Role {
@@ -30,30 +51,4 @@ enum PostCategory {
   ENTREPRENEURSHIP
   PERSONAL_FINANCE
   ECONOMY
-}
-
-model User {
-  id        String   @id @default(uuid())
-  googleId  String?  @unique
-  twitterId String?  @unique
-  username  String?  @unique
-  email     String?  @unique
-  fullname  String
-  password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  role      Role     @default(USER)
-  posts     Post[]
-}
-
-model Post {
-  id        String        @id @default(cuid())
-  title     String        @unique
-  content   String
-  createdAt DateTime      @default(now())
-  category  PostCategory?
-  updatedAt DateTime      @updatedAt
-  published Boolean       @default(false)
-  author    User          @relation(fields: [authorId], references: [id])
-  authorId  String
 }

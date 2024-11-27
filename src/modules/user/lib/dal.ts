@@ -2,6 +2,8 @@ import "server-only";
 
 import prisma from "@/modules/core/lib/prisma";
 import { cache } from "react";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { UserError } from "./errors";
 
 class User {
   static async verifyUsername(username: string) {
@@ -80,7 +82,9 @@ class User {
 
       return user;
     } catch (error) {
-      console.log(error);
+      if (error instanceof PrismaClientKnownRequestError) {
+        throw new UserError(error.message);
+      }
       throw new Error("Ups, something went wrong...");
     }
   }

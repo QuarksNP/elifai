@@ -1,11 +1,20 @@
 'use client';
 
+import { LogoutBtn } from "@/modules/auth/components/logout-btn";
 import { ButtonAsLink } from "@/modules/core/components/button-as-link";
-import { Icon, type IconName } from "@/modules/core/components/ui/icon";
+import { Logo } from "@/modules/core/components/logo";
+import { Button } from "@/modules/core/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/modules/core/components/ui/collapsible";
+import { Icon } from "@/modules/core/components/ui/icon";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "@/modules/core/components/ui/sheet";
+import { useMediaQuery } from "@/modules/core/hooks/use-media-query";
+import { useOpenCollapsibles } from "@/modules/core/hooks/use-open-collapsibles";
 import { cn } from "@/modules/core/lib/cn";
+import { NavigateOptions } from "@/modules/core/types";
+import { Profile } from "@/modules/user/components/profile";
 import { usePathname } from "next/navigation";
 
-const NAVIGATION: { name: string; href: string, icon?: IconName }[] = [
+const NAVIGATION: NavigateOptions[]= [
     { name: "Dashboard", href: "/portal", icon: "House" },
     { name: "Transactions", href: "/portal/transactions", icon: "DollarSign" },
     { name: "Accounts", href: "/portal/accounts", icon: "CreditCard" },
@@ -13,24 +22,109 @@ const NAVIGATION: { name: string; href: string, icon?: IconName }[] = [
     { name: "Blog", href: "/portal/blog", icon: "Newspaper" },
 ];
 
-export const Navigation = () => {
+const COLLAPSIBLE_ITEM_CLASSNAME = "text-sm text-muted-foreground hover:no-underline hover:text-primary-foreground"
+
+const SideBarContent = () => {
     const pathname = usePathname()
+    const { isOpen, handleToggle } = useOpenCollapsibles()
 
     return (
-        <nav className="flex flex-row fixed bottom-0 border-t border-muted z-10 bg-black w-full py-4 px-8 justify-between gap-2 left-0 md:relative md:border-none md:p-0 md:justify-normal md:bottom-auto md:w-auto">
-            {NAVIGATION.map(({ name, href, icon }, i) => (
-                <ButtonAsLink
-                    key={href + i}
-                    href={href}
-                    variant="ghost"
-                    className={cn("hover:bg-primary/15 hover:text-primary/85 text-muted-foreground", {
-                        "bg-primary/20 text-primary hover:bg-primary/20 hover:text-primary": pathname === href,
-                    })}
-                >
-                    {icon && <Icon name={icon} />}
-                    <span className="ml-2 hidden lg:block md:text-sm">{name}</span>
-                </ButtonAsLink>
-            ))}
-        </nav>
+        <aside className="flex flex-col h-full overflow-y-auto p-4 gap-8 md:h-screen md:border-r md:border-border md:p-8 text-sm text-muted-foreground">
+            {NAVIGATION.map(({ name, href, icon, subRoutes }, i) => {
+                if (!subRoutes) return (
+                    <ButtonAsLink
+                        href={href}
+                        key={href + i}
+                        className={cn("justify-start gap-2", COLLAPSIBLE_ITEM_CLASSNAME,{
+                            "text-primary": href === pathname,
+                        })}
+                        variant="link"
+                        size="none"
+                    >
+                        {icon && <Icon name={icon} />}
+                        {name}
+                    </ButtonAsLink>
+                )
+
+                return (
+                    <Collapsible key={href} open={!!isOpen[name]} onOpenChange={() => handleToggle(name)}>
+                            <CollapsibleTrigger asChild>
+                                <ButtonAsLink
+                                    href={subRoutes[0].href}
+                                    variant="link"
+                                    size="none"
+                                    className={cn("p-2 w-full justify-between", COLLAPSIBLE_ITEM_CLASSNAME,{
+                                        "text-primary": pathname.startsWith(href),
+                                    })}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        {icon && <Icon name={icon} className="text-primary" />}
+                                        <span className="line-clamp-1">{name}</span>
+                                    </div>
+
+                                    {isOpen[name]
+                                        ? <Icon name="ChevronDown" size={16} />
+                                        : <Icon name="ChevronRight" size={16} />
+                                    }
+                                </ButtonAsLink>
+                            </CollapsibleTrigger>
+                        <CollapsibleContent className="space-y-2 text-sm text-muted-foreground grow flex-col mt-6">
+                            {subRoutes?.map(({ name, href, icon }, i) => (
+                                <ButtonAsLink
+                                    key={href + i}
+                                    href={href}
+                                    variant="link"
+                                    className={cn("flex justify-start gap-2", COLLAPSIBLE_ITEM_CLASSNAME, {
+                                        "text-primary": href === pathname,
+                                    })}
+                                >
+                                    {icon && <Icon name={icon} className="h-4 w-4" />}
+                                    <span className="line-clamp-1">{name}</span>
+                                </ButtonAsLink>
+                            ))}
+                        </CollapsibleContent>
+                    </Collapsible>
+                )
+            })}
+            <LogoutBtn className="mt-auto" />
+        </aside>
     )
 }
+
+export const Navigation = ({ user }: { user?: { fullName: string } }) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)")
+
+    if (isDesktop) {
+        return (
+            <SideBarContent />
+        )
+    }
+
+    return (
+        <header className="flex items-center justify-between gap-4 p-4 md:p-8">
+            <Logo href="/" />
+            <Sheet>
+                <SheetTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        className="rounded border border-border"
+                    >
+                        <Icon name="Menu" size={24} />
+                    </Button>
+                </SheetTrigger>
+                <SheetContent className="border-border flex flex-col">
+                    <SheetHeader>
+                        <header className="flex flex-col items-center justify-center gap-4 mb-8">
+                            {user && <Profile
+                                withAction={false}
+                                user={{ name: user.fullName }}
+                            />}
+                            <h3>Welcome back, What do you want to do today?</h3>
+                        </header>
+                    </SheetHeader>
+                    <SideBarContent />
+                </SheetContent>
+            </Sheet>
+        </header>
+    )
+};

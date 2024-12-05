@@ -19,7 +19,9 @@ export default async function PortalLayout({
         <UserNavigation />
       )}
 
-      {response.role === "ADMIN" ? admin : user}
+      <div className="md:h-screen md:overflow-y-scroll">
+        {response.role === "ADMIN" ? admin : user}
+      </div>
     </main>
   );
 }

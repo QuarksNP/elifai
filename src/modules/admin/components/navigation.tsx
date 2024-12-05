@@ -48,6 +48,7 @@ const SideBarContent = () => {
 
   return (
     <aside className="flex flex-col h-full overflow-y-auto p-4 gap-8 md:h-screen md:border-r md:border-border md:p-8 text-sm text-muted-foreground">
+      <Logo className="hidden md:block" />
       {NAVIGATION.map(({ name, href, icon, subRoutes }, i) => {
         const isActive =
           pathname === href ||

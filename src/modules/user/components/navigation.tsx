@@ -10,6 +10,7 @@ import {
   CollapsibleTrigger,
 } from "@/modules/core/components/ui/collapsible";
 import { Icon } from "@/modules/core/components/ui/icon";
+import { Separator } from "@/modules/core/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -40,6 +41,7 @@ const SideBarContent = () => {
 
   return (
     <aside className="flex flex-col h-full overflow-y-auto p-4 gap-8 md:h-screen md:border-r md:border-border md:p-8 text-sm text-muted-foreground">
+      <Logo className="hidden md:block" />
       {NAVIGATION.map(({ name, href, icon, subRoutes }, i) => {
         const isActive =
           pathname === href ||
@@ -114,7 +116,14 @@ const SideBarContent = () => {
           </Collapsible>
         );
       })}
-      <LogoutBtn className="mt-auto" />
+
+      <div className="mt-auto space-y-2">
+        <Separator orientation="horizontal" className="w-full"/>
+        <LogoutBtn
+          variant="ghost"
+          className="w-full"
+        />
+      </div>
     </aside>
   );
 };

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { refreshSession } from './modules/auth/lib/session';
+import { getSession } from './modules/auth/lib/session';
  
 const protectedRoutes = ['/portal']
 const publicRoutes = ['/sign-in', '/(.)sign-in', '/sign-up', '/(.)sign-up', '/']
@@ -10,23 +10,21 @@ export default async function middleware(req: NextRequest) {
   const isProtectedRoute = protectedRoutes.includes(path)
   const isPublicRoute = publicRoutes.includes(path)
  
-  const res = await refreshSession(req);
-
-  const session = res?.cookies.get("session")?.value
+  const session = await getSession();
  
-  if (isProtectedRoute && !session) {
+  if (isProtectedRoute && !session.userId) {
     return NextResponse.redirect(new URL('/', req.nextUrl))
   }
  
   if (
     isPublicRoute &&
-    session &&
+    session.userId &&
     !req.nextUrl.pathname.startsWith('/portal')
   ) {
     return NextResponse.redirect(new URL('/portal', req.nextUrl))
   }
  
-  return res
+  return NextResponse.next()
 }
  
 // Routes Middleware should not run on

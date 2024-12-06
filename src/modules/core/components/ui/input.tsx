@@ -16,7 +16,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className, icon, type, password, containerClassName, ...props }, ref) => {
+    ({ className, icon, type, password, containerClassName, children, ...props }, ref) => {
 
         const [show, onClick] = useClick(true);
 
@@ -50,6 +50,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                         />
                     </button>
                 )}
+                {children}
             </Label>
         )
 

@@ -10,8 +10,8 @@ type ElementEventMap = {
 export const useClick = <T extends ElementType>(initialState = false) => {
   const [change, setChange] = useState(initialState);
 
-  function handleClick(e: ElementEventMap[T]) {
-    e.preventDefault();
+  function handleClick(e?: ElementEventMap[T]) {
+    e?.preventDefault();
     setChange((prev) => !prev);
   }
 

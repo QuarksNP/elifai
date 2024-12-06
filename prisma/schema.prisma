@@ -9,17 +9,18 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  googleId  String?  @unique
-  username  String?  @unique
-  email     String?  @unique
+  id        String    @id @default(uuid())
+  googleId  String?   @unique
+  username  String?   @unique
+  email     String?   @unique
   fullname  String
   password  String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  twitterId String?  @unique
-  role      Role     @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  twitterId String?   @unique
+  role      Role      @default(USER)
   posts     Post[]
+  accounts  Account[]
 }
 
 model Post {
@@ -33,6 +34,31 @@ model Post {
   authorId  String
   slug      String        @unique
   author    User          @relation(fields: [authorId], references: [id])
+}
+
+model Account {
+  id                  String        @id @default(uuid())
+  number              Bytes         @unique
+  title               String        @unique
+  provider            String
+  currentBalance      Float?
+  totalBalance        Float
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  openingDate         DateTime
+  expiresAt           Bytes?
+  securityCode        Bytes?
+  metadata            Json?
+  assetAllocation     Json?
+  riskProfile         RISK_PROFILE?
+  returns             Float?
+  status              AccountStatus @default(ACTIVE)
+  type                AccountType
+  userId              String
+  user                User          @relation(fields: [userId], references: [id])
+  associatedAccountId String?
+  associatedAccount   Account?      @relation("AssociatedAccount", fields: [associatedAccountId], references: [id])
+  associatedAccounts  Account[]     @relation("AssociatedAccount")
 }
 
 enum Role {
@@ -51,4 +77,23 @@ enum PostCategory {
   ENTREPRENEURSHIP
   PERSONAL_FINANCE
   ECONOMY
+}
+
+enum AccountType {
+  SAVINGS
+  CREDIT_CARD
+  INVESTMENT
+  CUSTOM
+}
+
+enum RISK_PROFILE {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum AccountStatus {
+  ACTIVE
+  INACTIVE
+  CLOSED
 }

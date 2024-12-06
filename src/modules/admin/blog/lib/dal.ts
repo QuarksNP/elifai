@@ -134,7 +134,7 @@ class Blog {
         };
       } else if (error instanceof Error) {
         return {
-          success: false,
+          success: false, 
           errors: error.message,
           data: null,
         };

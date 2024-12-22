@@ -11,16 +11,17 @@ import {
 
 import { Session } from "../types";
 import { NextRequest, NextResponse } from "next/server";
+import { ENVIRONMENTS, IS_PRODUCTION } from "@/modules/config/enviroments";
 
 const TTL = 3 * 24 * 60 * 60;
 const SESSION_NAME = "session";
 
 export const SESSION_OPTIONS: SessionOptions = {
-  password: process.env.SESSION_SECRET as string,
+  password: ENVIRONMENTS.SESSION_SECRET as string,
   cookieName: SESSION_NAME,
   ttl: TTL,
   cookieOptions: {
-    secure: process.env.NODE_ENV === "production",
+    secure: IS_PRODUCTION,
     httpOnly: true,
     maxAge: TTL - 60,
     path: "/",
@@ -63,7 +64,7 @@ export const refreshSession = async (
   }
 
   const unparsed: Session = await unsealData(session, {
-    password: process.env.SESSION_SECRET as string,
+    password: ENVIRONMENTS.SESSION_SECRET as string,
   });
 
   if (!unparsed.expires || !unparsed.user) {
@@ -87,7 +88,7 @@ export const refreshSession = async (
   unparsed.expires = new Date(Date.now() + TTL * 1000);
 
   const parsed = await sealData(unparsed, {
-    password: process.env.SESSION_SECRET as string,
+    password: ENVIRONMENTS.SESSION_SECRET as string,
     ttl: TTL,
   });
 

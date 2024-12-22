@@ -1,5 +1,6 @@
 "server-only";
 
+import { ENVIRONMENTS } from "@/modules/config/enviroments";
 import { generateCodeVerifier, generateState, Google, Twitter } from "arctic";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -31,15 +32,15 @@ const initializeAuthCookies = async () => {
 };
 
 export const google = new Google(
-  process.env.GOOGLE_CLIENT_ID as string,
-  process.env.GOOGLE_CLIENT_SECRECT_ID as string,
-  process.env.GOOGLE_REDIRECT_URI as string
+  ENVIRONMENTS.GOOGLE_CLIENT_ID ?? "",
+  ENVIRONMENTS.GOOGLE_CLIENT_SECRET ?? "",
+  ENVIRONMENTS.GOOGLE_REDIRECT_URI ?? ""
 );
 
 export const twitter = new Twitter(
-  process.env.TWITTER_CLIENT_ID as string,
-  process.env.TWITTER_CLIENT_SECRET_ID as string,
-  process.env.TWITTER_REDIRECT_URI as string
+  ENVIRONMENTS.TWITTER_CLIENT_ID ?? "",
+  ENVIRONMENTS.TWITTER_CLIENT_SECRET ?? "",
+  ENVIRONMENTS.TWITTER_REDIRECT_URI ?? ""
 );
 
 export const googleProviderCallback = cache(async () => {

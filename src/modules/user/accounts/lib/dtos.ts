@@ -1,4 +1,4 @@
-import type { Account, CreditCard, Investment, Savings } from "../types";
+import type { Account, CreditCard, Investment, Savings } from '../types';
 
 export function CreditCardDTO(account: Account): CreditCard {
   return {

@@ -1,9 +1,9 @@
-import { filterPosts } from "@/modules/admin/blog/actions/filter-posts";
-import { getPosts } from "@/modules/admin/blog/actions/get-posts";
-import { ListOfPosts } from "@/modules/admin/blog/components/list-of-posts";
-import { checkUserRole } from "@/modules/auth/actions/check-user-role";
-import { ButtonAsLink } from "@/modules/core/components/button-as-link";
-import { Icon } from "@/modules/core/components/ui/icon";
+import { filterPosts } from '@/modules/admin/blog/actions/filter-posts';
+import { getPosts } from '@/modules/admin/blog/actions/get-posts';
+import { ListOfPosts } from '@/modules/admin/blog/components/list-of-posts';
+import { checkUserRole } from '@/modules/auth/actions/check-user-role';
+import { ButtonAsLink } from '@/modules/core/components/button-as-link';
+import { Icon } from '@/modules/core/components/ui/icon';
 
 type SearchParams = Promise<{
   search?: string;
@@ -16,7 +16,7 @@ export default async function Page({
 }) {
   const role = await checkUserRole();
 
-  if (role !== "ADMIN") {
+  if (role !== 'ADMIN') {
     return null;
   }
 

@@ -1,12 +1,12 @@
-import { authorization } from "@/modules/auth/lib/decorators";
-import prisma from "@/modules/core/lib/prisma";
-import { AccountType, Prisma } from "@prisma/client";
-import { CreditCardDTO, InvestmentDTO, SavingsDTO } from "./dtos";
-import { AuthError } from "@/modules/auth/errors/auth_error";
-import { cache } from "react";
+import { authorization } from '@/modules/auth/lib/decorators';
+import prisma from '@/modules/core/lib/prisma';
+import { AccountType, Prisma } from '@prisma/client';
+import { CreditCardDTO, InvestmentDTO, SavingsDTO } from './dtos';
+import { AuthError } from '@/modules/auth/errors/auth_error';
+import { cache } from 'react';
 
 class Account {
-  @authorization("USER")
+  @authorization('USER')
   static async getAccountsByType(userId: string, type: AccountType) {
     try {
       const user = await prisma.user.findUnique({
@@ -24,7 +24,7 @@ class Account {
         INVESTMENT: InvestmentDTO,
         SAVINGS: SavingsDTO,
         CUSTOM: () => null,
-      }
+      };
 
       const accounts = await prisma.account
         .findMany({
@@ -33,12 +33,10 @@ class Account {
             userId,
           },
         })
-        .then((accounts) =>
-          accounts.map((account) => mapDTOs[type](account))
-        );
+        .then((accounts) => accounts.map((account) => mapDTOs[type](account)));
 
       if (!accounts) {
-        throw new Error("Ups, something went wrong...");
+        throw new Error('Ups, something went wrong...');
       }
 
       return { success: true, errors: null, data: accounts };
@@ -54,11 +52,11 @@ class Account {
           data: null,
         };
       }
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
-  @authorization("USER")
+  @authorization('USER')
   static async createAccount(userId: string, data: Prisma.AccountCreateInput) {
     try {
       const user = await prisma.user.findUnique({
@@ -70,7 +68,7 @@ class Account {
       if (!user) {
         throw new AuthError(
           "You don't have permission to create an account",
-          401
+          401,
         );
       }
 
@@ -86,7 +84,7 @@ class Account {
       });
 
       if (!account) {
-        throw new Error("Ups, something went wrong...");
+        throw new Error('Ups, something went wrong...');
       }
 
       return {
@@ -106,7 +104,7 @@ class Account {
           data: null,
         };
       }
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 }

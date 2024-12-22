@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { deletePost } from "../actions/delete-post";
-import { toast } from "sonner";
-import { AuthError } from "@/modules/auth/errors/auth_error";
+import { useState } from 'react';
+import { deletePost } from '../actions/delete-post';
+import { toast } from 'sonner';
+import { AuthError } from '@/modules/auth/errors/auth_error';
 
 export const useHandleDbPost = () => {
   const [state, setState] = useState({
@@ -22,25 +22,25 @@ export const useHandleDbPost = () => {
           ...prev,
           isDeleting: false,
         }));
-        toast.success("Post deleted successfully", {
+        toast.success('Post deleted successfully', {
           description: `The post with id ${id} has been deleted`,
           duration: 5000,
         });
       }
     } catch (error) {
       if (error instanceof Error) {
-        toast.error("Error", {
+        toast.error('Error', {
           description: error.message,
           duration: 5000,
         });
       } else if (error instanceof AuthError) {
-        toast.error("Unauthorized", {
+        toast.error('Unauthorized', {
           description: error.message,
           duration: 5000,
         });
       } else {
-        toast.error("Unknown error", {
-          description: "An unknown error occurred...",
+        toast.error('Unknown error', {
+          description: 'An unknown error occurred...',
           duration: 5000,
         });
       }

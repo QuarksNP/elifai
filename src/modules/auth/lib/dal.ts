@@ -1,22 +1,22 @@
-import "server-only";
+import 'server-only';
 
-import { cache } from "react";
+import { cache } from 'react';
 
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
-import { setSession, getSession } from "./session";
+import { setSession, getSession } from './session';
 
-import prisma from "@/modules/core/lib/prisma";
+import prisma from '@/modules/core/lib/prisma';
 
-import { comparePassword, hashPassword } from "./encrypt-password";
+import { comparePassword, hashPassword } from './encrypt-password';
 
-import type { Role, SignInRequest, UserCreateInput } from "../types";
+import type { Role, SignInRequest, UserCreateInput } from '../types';
 
 export const _verifySession = cache(async () => {
   const session = await getSession();
 
   if (!session.user.id || !session.expires) {
-    redirect("/");
+    redirect('/');
   }
 
   return {
@@ -44,7 +44,7 @@ class Auth {
       });
 
       if (!user || !user.password) {
-        return { success: false, errors: "Invalid credentials" };
+        return { success: false, errors: 'Invalid credentials' };
       }
 
       const isValidPassword = await comparePassword({
@@ -53,21 +53,21 @@ class Auth {
       });
 
       if (!isValidPassword) {
-        return { success: false, errors: "Invalid credentials" };
+        return { success: false, errors: 'Invalid credentials' };
       }
 
       await setSession({ user });
 
-      return { success: true, errors: "User authenticated" };
+      return { success: true, errors: 'User authenticated' };
     } catch {
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
   static async signUp(data: UserCreateInput) {
     try {
       if (data.password !== data.confirmPassword) {
-        return { success: false, errors: "Your password do not match" };
+        return { success: false, errors: 'Your password do not match' };
       }
 
       const hashedPassword = await hashPassword(data.password);
@@ -120,14 +120,14 @@ class Auth {
       });
 
       if (!user) {
-        return { success: false, errors: "Error creating user" };
+        return { success: false, errors: 'Error creating user' };
       }
 
       await setSession({ user });
 
-      return { success: true, errors: "User authenticated and created" };
+      return { success: true, errors: 'User authenticated and created' };
     } catch {
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 }

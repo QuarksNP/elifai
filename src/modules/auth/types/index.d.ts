@@ -1,4 +1,4 @@
-import type { Prisma, Role as PrismaUserRole } from "@prisma/client";
+import type { Prisma, Role as PrismaUserRole } from '@prisma/client';
 
 export type Session = {
   user: {

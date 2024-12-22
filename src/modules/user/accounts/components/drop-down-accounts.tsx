@@ -2,8 +2,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/modules/core/components/ui/accordion";
-import { AccountCard } from "./account-card";
+} from '@/modules/core/components/ui/accordion';
+import { AccountCard } from './account-card';
 
 interface DropDownAccountsProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,7 +21,7 @@ export const DropDownAccounts = ({ accounts, name }: DropDownAccountsProps) => {
             <AccountCard
               key={account.id}
               title={account.title}
-              number={"11111"}
+              number={'11111'}
               currentBalance={account.currentBalance}
               totalBalance={account.totalBalance}
               type={account.type}

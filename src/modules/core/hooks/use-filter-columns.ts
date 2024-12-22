@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export const useFilterColumns = (initialState: string[]) => {
   const [currentColumns, setCurrentColumns] = useState<string[]>(initialState);
@@ -9,7 +9,7 @@ export const useFilterColumns = (initialState: string[]) => {
     const fields = Object.fromEntries(new FormData(form).entries());
 
     setCurrentColumns(
-      Object.keys(fields).filter((key) => fields[key] === "on")
+      Object.keys(fields).filter((key) => fields[key] === 'on'),
     );
   }
 

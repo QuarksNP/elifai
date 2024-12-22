@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import { _verifySession } from "@/modules/auth/lib/dal";
-import { Blog } from "../lib/dal";
-import prisma from "@/modules/core/lib/prisma";
+import { _verifySession } from '@/modules/auth/lib/dal';
+import { Blog } from '../lib/dal';
+import prisma from '@/modules/core/lib/prisma';
 
 export const getPosts = async () => {
   try {
@@ -12,7 +12,7 @@ export const getPosts = async () => {
     } = await _verifySession();
 
     if (!isAuthenticated) {
-      throw new Error("Unauthenticated");
+      throw new Error('Unauthenticated');
     }
 
     const user = await prisma.user.findUnique({
@@ -21,10 +21,10 @@ export const getPosts = async () => {
       },
     });
 
-    console.log("admin", { user });
+    console.log('admin', { user });
 
-    if (user?.role !== "ADMIN") {
-      throw new Error("Unauthorized");
+    if (user?.role !== 'ADMIN') {
+      throw new Error('Unauthorized');
     }
 
     const result = await Blog.getPosts(id);

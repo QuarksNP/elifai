@@ -1,20 +1,20 @@
-import "server-only";
+import 'server-only';
 
-import { cookies } from "next/headers";
+import { cookies } from 'next/headers';
 
 import {
   getIronSession,
   SessionOptions,
   sealData,
   unsealData,
-} from "iron-session";
+} from 'iron-session';
 
-import { Session } from "../types";
-import { NextRequest, NextResponse } from "next/server";
-import { ENVIRONMENTS, IS_PRODUCTION } from "@/modules/config/enviroments";
+import { Session } from '../types';
+import { NextRequest, NextResponse } from 'next/server';
+import { ENVIRONMENTS, IS_PRODUCTION } from '@/modules/config/enviroments';
 
 const TTL = 3 * 24 * 60 * 60;
-const SESSION_NAME = "session";
+const SESSION_NAME = 'session';
 
 export const SESSION_OPTIONS: SessionOptions = {
   password: ENVIRONMENTS.SESSION_SECRET as string,
@@ -24,24 +24,24 @@ export const SESSION_OPTIONS: SessionOptions = {
     secure: IS_PRODUCTION,
     httpOnly: true,
     maxAge: TTL - 60,
-    path: "/",
-    sameSite: "lax",
+    path: '/',
+    sameSite: 'lax',
   },
 };
 
 export const getSession = async () => {
   const session = await getIronSession<Session>(
     await cookies(),
-    SESSION_OPTIONS
+    SESSION_OPTIONS,
   );
 
   return session;
 };
 
-export const setSession = async ({ user }: Pick<Session, "user">) => {
+export const setSession = async ({ user }: Pick<Session, 'user'>) => {
   const session = await getIronSession<Session>(
     await cookies(),
-    SESSION_OPTIONS
+    SESSION_OPTIONS,
   );
 
   Object.assign(session, { user });
@@ -53,7 +53,7 @@ export const setSession = async ({ user }: Pick<Session, "user">) => {
 };
 
 export const refreshSession = async (
-  req: NextRequest
+  req: NextRequest,
 ): Promise<NextResponse> => {
   const session = req.cookies.get(SESSION_NAME)?.value;
 
@@ -72,15 +72,15 @@ export const refreshSession = async (
   }
 
   const expiresAt =
-    typeof unparsed.expires === "string"
+    typeof unparsed.expires === 'string'
       ? new Date(unparsed.expires)
       : unparsed.expires;
 
   if (Date.now() >= expiresAt.getTime()) {
     res.cookies.delete({
       name: SESSION_NAME,
-      path: "/",
-      sameSite: "lax",
+      path: '/',
+      sameSite: 'lax',
     });
     return res;
   }
@@ -103,7 +103,7 @@ export const refreshSession = async (
 export const destroySession = async () => {
   const session = await getIronSession<Session>(
     await cookies(),
-    SESSION_OPTIONS
+    SESSION_OPTIONS,
   );
 
   session.destroy();

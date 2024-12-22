@@ -1,9 +1,9 @@
-import { google } from "@/modules/auth/lib/providers";
-import { setSession } from "@/modules/auth/lib/session";
-import prisma from "@/modules/core/lib/prisma";
-import { decodeIdToken } from "arctic";
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
+import { google } from '@/modules/auth/lib/providers';
+import { setSession } from '@/modules/auth/lib/session';
+import prisma from '@/modules/core/lib/prisma';
+import { decodeIdToken } from 'arctic';
+import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 
 type GoogleUserToken = {
   iss: string; // Issuer (e.g., "https://accounts.google.com")
@@ -22,25 +22,25 @@ type GoogleUserToken = {
 };
 
 export async function GET(req: NextRequest) {
-  const code = req.nextUrl.searchParams.get("code");
-  const state = req.nextUrl.searchParams.get("state");
+  const code = req.nextUrl.searchParams.get('code');
+  const state = req.nextUrl.searchParams.get('state');
 
   const cookiesStore = await cookies();
 
-  const storedCode = cookiesStore.get("codeVerifier")?.value;
-  const storedState = cookiesStore.get("state")?.value;
+  const storedCode = cookiesStore.get('codeVerifier')?.value;
+  const storedState = cookiesStore.get('state')?.value;
 
   try {
     if (code === null || !storedState || state !== storedState || !storedCode) {
-      throw new Error("Invalid request");
+      throw new Error('Invalid request');
     }
 
-    const error = req.nextUrl.searchParams.get("error");
+    const error = req.nextUrl.searchParams.get('error');
 
     console.log(error);
 
-    if (error === "access_denied") {
-      throw new Error("Access denied");
+    if (error === 'access_denied') {
+      throw new Error('Access denied');
     }
     const tokens = await google.validateAuthorizationCode(code, storedCode);
 
@@ -49,7 +49,7 @@ export async function GET(req: NextRequest) {
     const claims = decodeIdToken(idToken) as GoogleUserToken;
 
     if (!claims) {
-      throw new Error("Invalid request");
+      throw new Error('Invalid request');
     }
 
     const dbUser =
@@ -77,9 +77,9 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error(error);
   } finally {
-    cookiesStore.delete("codeVerifier");
-    cookiesStore.delete("state");
+    cookiesStore.delete('codeVerifier');
+    cookiesStore.delete('state');
   }
 
-  return NextResponse.redirect(new URL("/", req.nextUrl));
+  return NextResponse.redirect(new URL('/', req.nextUrl));
 }

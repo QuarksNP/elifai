@@ -1,13 +1,13 @@
-import "server-only";
+import 'server-only';
 
-import { AuthError } from "@/modules/auth/errors/auth_error";
-import { authorization } from "@/modules/auth/lib/decorators";
-import prisma from "@/modules/core/lib/prisma";
-import { Prisma } from "@prisma/client";
-import { cache } from "react";
+import { AuthError } from '@/modules/auth/errors/auth_error';
+import { authorization } from '@/modules/auth/lib/decorators';
+import prisma from '@/modules/core/lib/prisma';
+import { Prisma } from '@prisma/client';
+import { cache } from 'react';
 
 class Blog {
-  @authorization("USER")
+  @authorization('USER')
   static async getPosts() {
     try {
       const posts = await prisma.post.findMany({
@@ -29,7 +29,7 @@ class Blog {
       if (!posts) {
         return {
           success: false,
-          errors: "Error getting posts",
+          errors: 'Error getting posts',
           data: null,
         };
       }
@@ -50,10 +50,10 @@ class Blog {
         };
       }
 
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
-  @authorization("USER")
+  @authorization('USER')
   static async getPostBySlug(slug: string) {
     try {
       const post = await prisma.post.findUnique({
@@ -65,7 +65,7 @@ class Blog {
       if (!post) {
         return {
           success: false,
-          errors: "Error getting post",
+          errors: 'Error getting post',
           data: null,
         };
       }
@@ -86,7 +86,7 @@ class Blog {
         };
       }
 
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 }

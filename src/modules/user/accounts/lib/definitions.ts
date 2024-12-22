@@ -1,7 +1,7 @@
-import { AccountStatus, AccountType, RISK_PROFILE } from "@prisma/client";
-import { z } from "zod";
+import { AccountStatus, AccountType, RISK_PROFILE } from '@prisma/client';
+import { z } from 'zod';
 
-import type { AccountCreateInput } from "../types";
+import type { AccountCreateInput } from '../types';
 
 export const CreditCardSchema = z.object({
   number: z.string(),

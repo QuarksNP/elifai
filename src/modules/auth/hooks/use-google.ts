@@ -1,11 +1,11 @@
-import { googleSignIn } from "../actions/google-sign-in"
+import { googleSignIn } from '../actions/google-sign-in';
 
 export const useGoogle = () => {
-    async function handleGoogleSignIn() {
-        await googleSignIn();
-    }
+  async function handleGoogleSignIn() {
+    await googleSignIn();
+  }
 
-    return {
-       handleGoogleSignIn 
-    }
-}
+  return {
+    handleGoogleSignIn,
+  };
+};

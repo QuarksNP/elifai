@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { Button, type ButtonProps } from "@/modules/core/components/ui/button";
-import { useLogout } from "../hooks/use-logout";
-import { ButtonLoading } from "@/modules/core/components/button-loading";
+import { Button, type ButtonProps } from '@/modules/core/components/ui/button';
+import { useLogout } from '../hooks/use-logout';
+import { ButtonLoading } from '@/modules/core/components/button-loading';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -12,8 +12,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/modules/core/components/ui/alert-dialog";
-import { Icon } from "@/modules/core/components/ui/icon";
+} from '@/modules/core/components/ui/alert-dialog';
+import { Icon } from '@/modules/core/components/ui/icon';
 
 interface LogoutBtnProps extends ButtonProps {
   className?: string;

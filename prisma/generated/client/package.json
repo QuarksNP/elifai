@@ -1,8 +1,7 @@
 {
   "name": "prisma-client-cfe240de60895616fd1f25be25f5385c060c4a8e71356818e58cde9dce11d831",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "browser": "index-browser.js",
+  "version": "5.21.1",
+  "sideEffects": false,
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -92,6 +91,7 @@
     },
     "./*": "./*"
   },
-  "version": "5.21.1",
-  "sideEffects": false
+  "main": "index.js",
+  "browser": "index-browser.js",
+  "types": "index.d.ts"
 }

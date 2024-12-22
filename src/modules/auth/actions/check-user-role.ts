@@ -1,7 +1,7 @@
-"use server";
+'use server';
 
-import { AuthError } from "../errors/auth_error";
-import { _verifySession } from "../lib/dal";
+import { AuthError } from '../errors/auth_error';
+import { _verifySession } from '../lib/dal';
 
 export const checkUserRole = async () => {
   const {
@@ -10,7 +10,7 @@ export const checkUserRole = async () => {
   } = await _verifySession();
 
   if (!isAuthenticated) {
-    throw new AuthError("Unauthenticated", 401);
+    throw new AuthError('Unauthenticated', 401);
   }
 
   return role;

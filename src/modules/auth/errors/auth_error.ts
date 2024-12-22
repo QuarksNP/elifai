@@ -3,7 +3,7 @@ export class AuthError extends Error {
 
   constructor(message: string, code: number) {
     super(message);
-    this.name = "AuthError";
+    this.name = 'AuthError';
     this.code = code;
     this.stack = undefined;
   }

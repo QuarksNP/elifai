@@ -1,4 +1,4 @@
-import "server-only";
+import 'server-only';
 
 export const ENVIRONMENTS = {
   SESSION_SECRET: process.env.SESSION_SECRET,
@@ -10,6 +10,6 @@ export const ENVIRONMENTS = {
   TWITTER_REDIRECT_URI: process.env.TWITTER_REDIRECT_URI,
 } as const;
 
-export const IS_PRODUCTION = process.env.NODE_ENV === "production";
+export const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
 export type EnvironmentsType = typeof ENVIRONMENTS;

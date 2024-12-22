@@ -1,39 +1,39 @@
-"use client";
+'use client';
 
-import { LogoutBtn } from "@/modules/auth/components/logout-btn";
-import { ButtonAsLink } from "@/modules/core/components/button-as-link";
-import { Logo } from "@/modules/core/components/logo";
-import { Button } from "@/modules/core/components/ui/button";
+import { LogoutBtn } from '@/modules/auth/components/logout-btn';
+import { ButtonAsLink } from '@/modules/core/components/button-as-link';
+import { Logo } from '@/modules/core/components/logo';
+import { Button } from '@/modules/core/components/ui/button';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/modules/core/components/ui/collapsible";
-import { Icon } from "@/modules/core/components/ui/icon";
-import { Separator } from "@/modules/core/components/ui/separator";
+} from '@/modules/core/components/ui/collapsible';
+import { Icon } from '@/modules/core/components/ui/icon';
+import { Separator } from '@/modules/core/components/ui/separator';
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTrigger,
-} from "@/modules/core/components/ui/sheet";
-import { useMediaQuery } from "@/modules/core/hooks/use-media-query";
-import { useOpenCollapsibles } from "@/modules/core/hooks/use-open-collapsibles";
-import { cn } from "@/modules/core/lib/cn";
-import { NavigateOptions } from "@/modules/core/types";
-import { Profile } from "@/modules/user/components/profile";
-import { usePathname } from "next/navigation";
+} from '@/modules/core/components/ui/sheet';
+import { useMediaQuery } from '@/modules/core/hooks/use-media-query';
+import { useOpenCollapsibles } from '@/modules/core/hooks/use-open-collapsibles';
+import { cn } from '@/modules/core/lib/cn';
+import { NavigateOptions } from '@/modules/core/types';
+import { Profile } from '@/modules/user/components/profile';
+import { usePathname } from 'next/navigation';
 
 const NAVIGATION: NavigateOptions[] = [
-  { name: "Dashboard", href: "/portal", icon: "House" },
-  { name: "Transactions", href: "/portal/transactions", icon: "DollarSign" },
-  { name: "Accounts", href: "/portal/accounts", icon: "CreditCard" },
-  { name: "Blog", href: "/portal/blog", icon: "Newspaper" },
-  { name: "Settings", href: "/portal/settings", icon: "Cog" },
+  { name: 'Dashboard', href: '/portal', icon: 'House' },
+  { name: 'Transactions', href: '/portal/transactions', icon: 'DollarSign' },
+  { name: 'Accounts', href: '/portal/accounts', icon: 'CreditCard' },
+  { name: 'Blog', href: '/portal/blog', icon: 'Newspaper' },
+  { name: 'Settings', href: '/portal/settings', icon: 'Cog' },
 ];
 
 const COLLAPSIBLE_ITEM_CLASSNAME =
-  "text-sm text-muted-foreground hover:no-underline hover:text-primary-foreground";
+  'text-sm text-muted-foreground hover:no-underline hover:text-primary-foreground';
 
 const SideBarContent = () => {
   const pathname = usePathname();
@@ -45,15 +45,15 @@ const SideBarContent = () => {
       {NAVIGATION.map(({ name, href, icon, subRoutes }, i) => {
         const isActive =
           pathname === href ||
-          (href !== "/portal" && pathname.startsWith(`${href}/`));
+          (href !== '/portal' && pathname.startsWith(`${href}/`));
 
         if (!subRoutes)
           return (
             <ButtonAsLink
               href={href}
               key={href + i}
-              className={cn("justify-start gap-2", COLLAPSIBLE_ITEM_CLASSNAME, {
-                "text-primary": isActive,
+              className={cn('justify-start gap-2', COLLAPSIBLE_ITEM_CLASSNAME, {
+                'text-primary': isActive,
               })}
               variant="link"
               size="none"
@@ -71,14 +71,14 @@ const SideBarContent = () => {
           >
             <CollapsibleTrigger asChild>
               <ButtonAsLink
-                href={subRoutes[0].href}
+                href={subRoutes[0]?.href ?? ''}
                 variant="link"
                 size="none"
                 className={cn(
-                  "p-2 w-full justify-between",
+                  'p-2 w-full justify-between',
                   COLLAPSIBLE_ITEM_CLASSNAME,
                   {
-                    "text-primary": pathname.startsWith(href),
+                    'text-primary': pathname.startsWith(href),
                   },
                 )}
               >
@@ -101,10 +101,10 @@ const SideBarContent = () => {
                   href={href}
                   variant="link"
                   className={cn(
-                    "flex justify-start gap-2",
+                    'flex justify-start gap-2',
                     COLLAPSIBLE_ITEM_CLASSNAME,
                     {
-                      "text-primary": href === pathname,
+                      'text-primary': href === pathname,
                     },
                   )}
                 >
@@ -118,18 +118,15 @@ const SideBarContent = () => {
       })}
 
       <div className="mt-auto space-y-2">
-        <Separator orientation="horizontal" className="w-full"/>
-        <LogoutBtn
-          variant="ghost"
-          className="w-full"
-        />
+        <Separator orientation="horizontal" className="w-full" />
+        <LogoutBtn variant="ghost" className="w-full" />
       </div>
     </aside>
   );
 };
 
 export const Navigation = ({ user }: { user?: { fullName: string } }) => {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (isDesktop) {
     return <SideBarContent />;

@@ -5,18 +5,18 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/modules/core/components/ui/card";
-import type { AccountCreateInput } from "../types";
-import { Separator } from "@/modules/core/components/ui/separator";
-import { Icon } from "@/modules/core/components/ui/icon";
+} from '@/modules/core/components/ui/card';
+import type { AccountCreateInput } from '../types';
+import { Separator } from '@/modules/core/components/ui/separator';
+import { Icon } from '@/modules/core/components/ui/icon';
 
 interface AccountCardProps
   extends Pick<
     AccountCreateInput,
-    "title" | "number" | "currentBalance" | "totalBalance" | "type"
+    'title' | 'number' | 'currentBalance' | 'totalBalance' | 'type'
   > {
-    n?: number;
-  }
+  n?: number;
+}
 
 export const AccountCard = ({
   title,
@@ -27,11 +27,11 @@ export const AccountCard = ({
 }: AccountCardProps) => {
   const renderIcon = () => {
     switch (type) {
-      case "CREDIT_CARD":
+      case 'CREDIT_CARD':
         return <Icon name="CreditCard" className="text-primary" size={36} />;
-      case "INVESTMENT":
+      case 'INVESTMENT':
         return <Icon name="DollarSign" className="text-primary" size={36} />;
-      case "SAVINGS":
+      case 'SAVINGS':
         return <Icon name="PiggyBank" className="text-primary" size={36} />;
       default:
         return <div />;
@@ -54,9 +54,9 @@ export const AccountCard = ({
               Current Balance
             </span>
             <h2 className="font-bold">
-              {currentBalance.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
+              {currentBalance.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
               })}
             </h2>
           </div>
@@ -64,9 +64,9 @@ export const AccountCard = ({
         <div>
           <span className="text-sm text-muted-foreground">Total Balance</span>
           <h2 className="font-bold">
-            {totalBalance.toLocaleString("en-US", {
-              style: "currency",
-              currency: "USD",
+            {totalBalance.toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
             })}
           </h2>
         </div>

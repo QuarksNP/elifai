@@ -1,9 +1,9 @@
-import "server-only";
+import 'server-only';
 
-import prisma from "@/modules/core/lib/prisma";
-import { cache } from "react";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { UserError } from "./errors";
+import prisma from '@/modules/core/lib/prisma';
+import { cache } from 'react';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { UserError } from './errors';
 
 class User {
   static async verifyUsername(username: string) {
@@ -11,7 +11,7 @@ class User {
       if (!username) {
         return {
           success: false,
-          errors: "There is no an identification to validate the user",
+          errors: 'There is no an identification to validate the user',
         };
       }
 
@@ -25,14 +25,14 @@ class User {
       if (userExists) {
         return {
           success: false,
-          errors: "This username already exists",
+          errors: 'This username already exists',
         };
       }
 
-      return { success: true, errors: "Valid credentials" };
+      return { success: true, errors: 'Valid credentials' };
     } catch (error) {
       console.log(error);
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
@@ -41,7 +41,7 @@ class User {
       if (!email) {
         return {
           success: false,
-          errors: "There is no an identification to validate the user",
+          errors: 'There is no an identification to validate the user',
         };
       }
 
@@ -55,14 +55,14 @@ class User {
       if (userExists) {
         return {
           success: false,
-          errors: "This email already exists",
+          errors: 'This email already exists',
         };
       }
 
-      return { success: true, errors: "Valid credentials" };
+      return { success: true, errors: 'Valid credentials' };
     } catch (error) {
       console.log(error);
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
@@ -85,7 +85,7 @@ class User {
       if (error instanceof PrismaClientKnownRequestError) {
         throw new UserError(error.message);
       }
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 }

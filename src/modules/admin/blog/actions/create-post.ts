@@ -1,22 +1,25 @@
-"use server";
+'use server';
 
-import { PostCategory } from "@prisma/client";
-import { PostSchema } from "../lib/definitions";
-import { Blog } from "../lib/dal";
-import { revalidatePath } from "next/cache";
-import { _verifySession } from "@/modules/auth/lib/dal";
+import { PostCategory } from '@prisma/client';
+import { PostSchema } from '../lib/definitions';
+import { Blog } from '../lib/dal';
+import { revalidatePath } from 'next/cache';
+import { _verifySession } from '@/modules/auth/lib/dal';
 
 export const createPost = async (post: {
   title: string;
   content: string;
   category: PostCategory;
 }) => {
-  const session = await _verifySession();
+  const {
+    isAuthenticated,
+    user: { id },
+  } = await _verifySession();
 
-  if (!session.isAuthenticated) {
+  if (!isAuthenticated) {
     return {
       success: false,
-      errors: "You need to be authenticated to create a post",
+      errors: 'You need to be authenticated to create a post',
     };
   }
 
@@ -29,12 +32,12 @@ export const createPost = async (post: {
   const result = await Blog.createPost({
     ...post,
     author: {
-      connect: { id: session.userId },
+      connect: { id },
     },
   });
 
   if (result.success) {
-    revalidatePath("/portal/blog");
+    revalidatePath('/portal/blog');
   }
 
   return result;

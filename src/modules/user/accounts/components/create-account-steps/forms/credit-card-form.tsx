@@ -4,9 +4,9 @@ import {
   FormField,
   FormItem,
   FormMessage,
-} from "@/modules/core/components/ui/form";
-import { useCreateCreditCardAccount } from "../../../hooks/use-create-credit-card-account";
-import { Input } from "@/modules/core/components/ui/input";
+} from '@/modules/core/components/ui/form';
+import { useCreateCreditCardAccount } from '../../../hooks/use-create-credit-card-account';
+import { Input } from '@/modules/core/components/ui/input';
 import {
   Dialog,
   DialogContent,
@@ -14,9 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/modules/core/components/ui/dialog";
-import { Button } from "@/modules/core/components/ui/button";
-import { Icon } from "@/modules/core/components/ui/icon";
+} from '@/modules/core/components/ui/dialog';
+import { Button } from '@/modules/core/components/ui/button';
+import { Icon } from '@/modules/core/components/ui/icon';
 
 const CreditCardForm = () => {
   const { form } = useCreateCreditCardAccount();
@@ -75,8 +75,8 @@ export const CreditCardDialog = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-            <DialogTitle>Credit Card</DialogTitle>
-            <DialogDescription>Add a new credit card</DialogDescription>
+          <DialogTitle>Credit Card</DialogTitle>
+          <DialogDescription>Add a new credit card</DialogDescription>
         </DialogHeader>
         <CreditCardForm />
       </DialogContent>

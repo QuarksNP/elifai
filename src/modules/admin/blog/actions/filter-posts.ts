@@ -1,9 +1,9 @@
-"use server";
+'use server';
 
-import { AuthError } from "@/modules/auth/errors/auth_error";
-import { _verifySession } from "@/modules/auth/lib/dal";
-import { Blog } from "../lib/dal";
-import { PostCategory } from "@prisma/client";
+import { AuthError } from '@/modules/auth/errors/auth_error';
+import { _verifySession } from '@/modules/auth/lib/dal';
+import { Blog } from '../lib/dal';
+import { PostCategory } from '@prisma/client';
 
 export const filterPosts = async ({
   search,
@@ -12,13 +12,16 @@ export const filterPosts = async ({
   search?: string;
   category?: PostCategory;
 }) => {
-  const session = await _verifySession();
+  const {
+    isAuthenticated,
+    user: { id },
+  } = await _verifySession();
 
-  if (!session.isAuthenticated) {
-    throw new AuthError("You must be logged in to perform this action", 401);
+  if (!isAuthenticated) {
+    throw new AuthError('You must be logged in to perform this action', 401);
   }
 
-  const result = await Blog.filterPosts(session.userId, {
+  const result = await Blog.filterPosts(id, {
     search,
     category,
   });

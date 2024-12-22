@@ -1,13 +1,13 @@
-import { checkUserRole } from "@/modules/auth/actions/check-user-role";
-import { Blockquote } from "@/modules/core/components/ui/blockquote";
-import { Icon } from "@/modules/core/components/ui/icon";
-import { getPosts } from "@/modules/user/blog/actions/get-posts";
-import { ListOfPosts } from "@/modules/user/blog/components/blog/list-of-posts";
+import { checkUserRole } from '@/modules/auth/actions/check-user-role';
+import { Blockquote } from '@/modules/core/components/ui/blockquote';
+import { Icon } from '@/modules/core/components/ui/icon';
+import { getPosts } from '@/modules/user/blog/actions/get-posts';
+import { ListOfPosts } from '@/modules/user/blog/components/blog/list-of-posts';
 
 export default async function Page() {
   const role = await checkUserRole();
 
-  if (role !== "USER") {
+  if (role !== 'USER') {
     return null;
   }
 

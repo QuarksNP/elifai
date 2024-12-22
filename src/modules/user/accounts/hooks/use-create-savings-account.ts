@@ -1,24 +1,24 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { SavingsSchema } from "../lib/definitions";
-import { z } from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { SavingsSchema } from '../lib/definitions';
+import { z } from 'zod';
 
 type FormData = z.infer<typeof SavingsSchema>;
 
 export const useCreateSavingsAccount = () => {
   const form = useForm<FormData>({
     resolver: zodResolver(SavingsSchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
-      number: "",
-      title: "",
-      provider: "",
+      number: '',
+      title: '',
+      provider: '',
       totalBalance: 0,
       securityCode: 0,
       openingDate: new Date(),
-      metadata: "",
-      status: "ACTIVE",
-      type: "SAVINGS",
+      metadata: '',
+      status: 'ACTIVE',
+      type: 'SAVINGS',
     },
   });
 

@@ -1,14 +1,14 @@
-import "server-only";
+import 'server-only';
 
-import { authorization } from "@/modules/auth/lib/decorators";
-import prisma from "@/modules/core/lib/prisma";
-import { PostCategory, Prisma } from "@prisma/client";
-import { cache } from "react";
-import { AuthError } from "@/modules/auth/errors/auth_error";
-import { slugify } from "@/modules/core/lib/slugify";
+import { authorization } from '@/modules/auth/lib/decorators';
+import prisma from '@/modules/core/lib/prisma';
+import { PostCategory, Prisma } from '@prisma/client';
+import { cache } from 'react';
+import { AuthError } from '@/modules/auth/errors/auth_error';
+import { slugify } from '@/modules/core/lib/slugify';
 
 class Blog {
-  @authorization("ADMIN")
+  @authorization('ADMIN')
   static async getPosts(adminId: string) {
     try {
       const posts = await prisma.post.findMany({
@@ -16,7 +16,7 @@ class Blog {
           authorId: adminId,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
         select: {
           id: true,
@@ -31,7 +31,7 @@ class Blog {
       if (!posts) {
         return {
           success: false,
-          errors: "Error getting posts",
+          errors: 'Error getting posts',
           data: null,
         };
       }
@@ -42,12 +42,12 @@ class Blog {
         data: posts,
       };
     } catch {
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
-  @authorization("ADMIN")
-  static async createPost(data: Omit<Prisma.PostCreateInput, "slug">) {
+  @authorization('ADMIN')
+  static async createPost(data: Omit<Prisma.PostCreateInput, 'slug'>) {
     const slug = slugify(data.title);
 
     try {
@@ -61,7 +61,7 @@ class Blog {
       if (!post) {
         return {
           success: false,
-          errors: "Error creating post",
+          errors: 'Error creating post',
           data: null,
         };
       }
@@ -74,14 +74,14 @@ class Blog {
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         throw new Error(
-          "Ups, it seems that the post already exists with a unique value",
+          'Ups, it seems that the post already exists with a unique value',
         );
       }
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
-  @authorization("ADMIN")
+  @authorization('ADMIN')
   static async deletePost(adminId: string, id: string) {
     try {
       const post = await prisma.post.findFirst({
@@ -117,13 +117,13 @@ class Blog {
       return {
         success: true,
         errors: null,
-        data: "Post deleted successfully",
+        data: 'Post deleted successfully',
       };
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError) {
         return {
           success: false,
-          errors: "An error occurred while deleting the post.",
+          errors: 'An error occurred while deleting the post.',
           data: null,
         };
       } else if (error instanceof AuthError) {
@@ -134,16 +134,16 @@ class Blog {
         };
       } else if (error instanceof Error) {
         return {
-          success: false, 
+          success: false,
           errors: error.message,
           data: null,
         };
       }
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 
-  @authorization("ADMIN")
+  @authorization('ADMIN')
   static async filterPosts(
     adminId: string,
     {
@@ -162,17 +162,17 @@ class Blog {
             {
               OR: [
                 {
-                  title: { startsWith: search, mode: "insensitive" },
+                  title: { startsWith: search, mode: 'insensitive' },
                 },
                 {
-                  id: { startsWith: search, mode: "insensitive" },
+                  id: { startsWith: search, mode: 'insensitive' },
                 },
               ],
             },
             category ? { category } : undefined,
           ].filter(Boolean) as [],
         },
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
         select: {
           id: true,
           title: true,
@@ -186,7 +186,7 @@ class Blog {
       if (!posts) {
         return {
           success: false,
-          errors: "Error getting posts",
+          errors: 'Error getting posts',
           data: null,
         };
       }
@@ -197,7 +197,7 @@ class Blog {
         data: posts,
       };
     } catch {
-      throw new Error("Ups, something went wrong...");
+      throw new Error('Ups, something went wrong...');
     }
   }
 }

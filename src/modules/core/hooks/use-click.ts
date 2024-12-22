@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-type ElementType = "button" | "div";
+type ElementType = 'button' | 'div';
 
 type ElementEventMap = {
-  button: React.MouseEvent<HTMLButtonElement>,
-  div: React.MouseEvent<HTMLDivElement>,
+  button: React.MouseEvent<HTMLButtonElement>;
+  div: React.MouseEvent<HTMLDivElement>;
 };
 
 export const useClick = <T extends ElementType>(initialState = false) => {

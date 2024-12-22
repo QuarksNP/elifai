@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/modules/core/components/ui/popover";
-import { FloatingButton } from "@/modules/core/components/floating-button";
-import { createPortal } from "react-dom";
-import { CreditCardDialog } from "./forms/credit-card-form";
-import { SavingsDialog } from "./forms/savings-form";
+} from '@/modules/core/components/ui/popover';
+import { FloatingButton } from '@/modules/core/components/floating-button';
+import { createPortal } from 'react-dom';
+import { CreditCardDialog } from './forms/credit-card-form';
+import { SavingsDialog } from './forms/savings-form';
 
 export const AccountTypes = () => {
   return (
@@ -23,7 +23,7 @@ export const AccountTypes = () => {
             <SavingsDialog />
           </PopoverContent>
         </Popover>,
-        document.body
+        document.body,
       )}
     </>
   );

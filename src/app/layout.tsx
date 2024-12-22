@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Toaster } from "@/modules/core/components/ui/toaster";
-import { Kanit } from "next/font/google";
+import type { Metadata } from 'next';
+import './globals.css';
+import { Toaster } from '@/modules/core/components/ui/toaster';
+import { Kanit } from 'next/font/google';
 
 const kanit = Kanit({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
-  title: "Elifai",
-  description: "Intuitive and easy financial control",
+  title: 'Elifai',
+  description: 'Intuitive and easy financial control',
 };
 
 export default function RootLayout({

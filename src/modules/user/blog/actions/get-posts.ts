@@ -1,15 +1,15 @@
-"use server";
+'use server';
 
-import { _verifySession } from "@/modules/auth/lib/dal";
-import { Blog } from "../lib/dal";
-import { AuthError } from "@/modules/auth/errors/auth_error";
+import { _verifySession } from '@/modules/auth/lib/dal';
+import { Blog } from '../lib/dal';
+import { AuthError } from '@/modules/auth/errors/auth_error';
 
 export async function getPosts() {
   try {
     const session = await _verifySession();
 
     if (!session.isAuthenticated) {
-      throw new AuthError("You must be logged in to perform this action", 401);
+      throw new AuthError('You must be logged in to perform this action', 401);
     }
 
     const result = await Blog.getPosts();
@@ -23,6 +23,6 @@ export async function getPosts() {
     if (error instanceof Error) {
       throw new Error(error.message);
     }
-    throw new Error("Ups, something went wrong...");
+    throw new Error('Ups, something went wrong...');
   }
 }

@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { twitterProviderCallback } from "../lib/providers";
+import { twitterProviderCallback } from '../lib/providers';
 
 export const twitterSignIn = async () => {
   const result = await twitterProviderCallback();

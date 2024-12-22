@@ -1,4 +1,4 @@
-import * as bcrypt from "bcrypt";
+import * as bcrypt from 'bcrypt';
 
 export const hashPassword = async (password: string) => {
   try {
@@ -7,7 +7,7 @@ export const hashPassword = async (password: string) => {
     return hashedPassword;
   } catch (error) {
     console.log(error);
-    throw new Error("Error hashing password");
+    throw new Error('Error hashing password');
   }
 };
 
@@ -22,8 +22,8 @@ export const comparePassword = async ({
     const isValid = await bcrypt.compare(password, hashedPassword);
 
     return isValid;
-  } catch(error) {
-    console.log(error)
-    throw new Error("Error comparing password");
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error comparing password');
   }
 };

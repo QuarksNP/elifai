@@ -1,13 +1,13 @@
-import { Accordion } from "@/modules/core/components/ui/accordion";
-import { getAccountsByType } from "@/modules/user/accounts/actions/get-accounts-by-type";
-import { AccountTypes } from "@/modules/user/accounts/components/create-account-steps/account-types";
-import { DropDownAccounts } from "@/modules/user/accounts/components/drop-down-accounts";
+import { Accordion } from '@/modules/core/components/ui/accordion';
+import { getAccountsByType } from '@/modules/user/accounts/actions/get-accounts-by-type';
+import { AccountTypes } from '@/modules/user/accounts/components/create-account-steps/account-types';
+import { DropDownAccounts } from '@/modules/user/accounts/components/drop-down-accounts';
 
 export default async function Page() {
-  const [, ,savings] = await Promise.all([
-    getAccountsByType("CREDIT_CARD"),
-    getAccountsByType("INVESTMENT"),
-    getAccountsByType("SAVINGS"),
+  const [, , savings] = await Promise.all([
+    getAccountsByType('CREDIT_CARD'),
+    getAccountsByType('INVESTMENT'),
+    getAccountsByType('SAVINGS'),
   ]);
 
   return (
@@ -20,7 +20,7 @@ export default async function Page() {
       <Accordion
         type="multiple"
         className="space-y-8"
-        defaultValue={["Credit Cards", "Investments", "Savings"]}
+        defaultValue={['Credit Cards', 'Investments', 'Savings']}
       >
         <DropDownAccounts accounts={savings} name="Credit Cards" />
         <DropDownAccounts accounts={savings} name="Investments" />

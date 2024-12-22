@@ -16,8 +16,10 @@ export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get("code");
   const state = req.nextUrl.searchParams.get("state");
 
-  const storedCode = cookies().get("codeVerifier")?.value;
-  const storedState = cookies().get("state")?.value;
+  const cookiesStore = await cookies();
+
+  const storedCode = cookiesStore.get("codeVerifier")?.value;
+  const storedState = cookiesStore.get("state")?.value;
 
   try {
     if (code === null || !storedState || state !== storedState || !storedCode) {
@@ -44,6 +46,7 @@ export async function GET(req: NextRequest) {
 
         select: {
           id: true,
+          role: true,
         },
       })) ??
       (await prisma.user.create({
@@ -54,15 +57,18 @@ export async function GET(req: NextRequest) {
 
         select: {
           id: true,
+          role: true,
         },
       }));
 
-    await setSession({ userId: dbUser.id });
+    await setSession({
+      user: dbUser,
+    });
   } catch (error) {
     console.log(error);
   } finally {
-    cookies().delete("codeVerifier");
-    cookies().delete("state");
+    cookiesStore.delete("codeVerifier");
+    cookiesStore.delete("state");
   }
 
   return NextResponse.redirect(new URL("/", req.nextUrl));

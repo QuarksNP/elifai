@@ -1,15 +1,17 @@
-'server-only';
+"server-only";
 
 import { generateCodeVerifier, generateState, Google, Twitter } from "arctic";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 
-const setCookies = () => {
+const initializeAuthCookies = async () => {
   const state = generateState();
   const codeVerifier = generateCodeVerifier();
 
-  cookies().set("state", state, {
+  const cookiesStore = await cookies();
+
+  cookiesStore.set("state", state, {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     sameSite: "lax",
@@ -17,7 +19,7 @@ const setCookies = () => {
     maxAge: 60 * 10,
   });
 
-  cookies().set("codeVerifier", codeVerifier, {
+  cookiesStore.set("codeVerifier", codeVerifier, {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
     sameSite: "lax",
@@ -41,7 +43,7 @@ export const twitter = new Twitter(
 );
 
 export const googleProviderCallback = cache(async () => {
-  const { state, codeVerifier } = setCookies();
+  const { state, codeVerifier } = await initializeAuthCookies();
 
   const URL = google.createAuthorizationURL(state, codeVerifier, [
     "openid",
@@ -53,7 +55,7 @@ export const googleProviderCallback = cache(async () => {
 });
 
 export const twitterProviderCallback = cache(async () => {
-  const { state, codeVerifier } = setCookies();
+  const { state, codeVerifier } = await initializeAuthCookies();
 
   const URL = twitter.createAuthorizationURL(state, codeVerifier, [
     "users.read",

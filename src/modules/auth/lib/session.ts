@@ -29,15 +29,21 @@ export const SESSION_OPTIONS: SessionOptions = {
 };
 
 export const getSession = async () => {
-  const session = await getIronSession<Session>(cookies(), SESSION_OPTIONS);
+  const session = await getIronSession<Session>(
+    await cookies(),
+    SESSION_OPTIONS
+  );
 
   return session;
 };
 
-export const setSession = async (data: { userId: string }) => {
-  const session = await getIronSession<Session>(cookies(), SESSION_OPTIONS);
+export const setSession = async ({ user }: Pick<Session, "user">) => {
+  const session = await getIronSession<Session>(
+    await cookies(),
+    SESSION_OPTIONS
+  );
 
-  session.userId = data.userId;
+  Object.assign(session, { user });
   session.expires = new Date(Date.now() + TTL * 1000);
 
   await session.save();
@@ -60,7 +66,7 @@ export const refreshSession = async (
     password: process.env.SESSION_SECRET as string,
   });
 
-  if (!unparsed.expires || !unparsed.userId) {
+  if (!unparsed.expires || !unparsed.user) {
     return res;
   }
 
@@ -94,7 +100,10 @@ export const refreshSession = async (
   return res;
 };
 export const destroySession = async () => {
-  const session = await getIronSession<Session>(cookies(), SESSION_OPTIONS);
+  const session = await getIronSession<Session>(
+    await cookies(),
+    SESSION_OPTIONS
+  );
 
   session.destroy();
 };

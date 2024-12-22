@@ -4,7 +4,8 @@ import { ButtonAsLink } from "@/modules/core/components/button-as-link";
 import { Badge } from "@/modules/core/components/ui/badge";
 import { formatUpperCase } from "@/modules/core/lib/format-upper-case";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+  const params = await props.params;
   const post = await getPostBySlug(params.slug);
 
   const formattedCategory = formatUpperCase(post?.category ?? "");

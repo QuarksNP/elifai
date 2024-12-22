@@ -12,16 +12,19 @@ export function authorization(role: Role) {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: unknown[]) {
-      const { isAuthenticated, userId } = await _verifySession();
+      const {
+        isAuthenticated,
+        user: { id },
+      } = await _verifySession();
 
-      if (!isAuthenticated || !userId) {
+      if (!isAuthenticated || !id) {
         throw new AuthError("Unauthorized, cannot execute", 403);
       }
 
       try {
         const user = await prisma.user.findUnique({
           where: {
-            id: userId,
+            id,
           },
           select: {
             role: true,

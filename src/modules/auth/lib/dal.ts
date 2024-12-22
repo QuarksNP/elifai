@@ -10,18 +10,21 @@ import prisma from "@/modules/core/lib/prisma";
 
 import { comparePassword, hashPassword } from "./encrypt-password";
 
-import type { SignInRequest, UserCreateInput } from "../types";
+import type { Role, SignInRequest, UserCreateInput } from "../types";
 
-export const _verifySession= cache(async () => {
+export const _verifySession = cache(async () => {
   const session = await getSession();
 
-  if (!session.userId || !session.expires) {
+  if (!session.user.id || !session.expires) {
     redirect("/");
   }
 
   return {
     isAuthenticated: true,
-    userId: session.userId,
+    user: {
+      id: session.user.id,
+      role: session.user.role as Role,
+    },
     expires: session.expires,
   };
 });
@@ -35,6 +38,7 @@ class Auth {
         },
         select: {
           id: true,
+          role: true,
           password: true,
         },
       });
@@ -52,7 +56,7 @@ class Auth {
         return { success: false, errors: "Invalid credentials" };
       }
 
-      await setSession({ userId: user.id });
+      await setSession({ user });
 
       return { success: true, errors: "User authenticated" };
     } catch {
@@ -111,6 +115,7 @@ class Auth {
         },
         select: {
           id: true,
+          role: true,
         },
       });
 
@@ -118,7 +123,7 @@ class Auth {
         return { success: false, errors: "Error creating user" };
       }
 
-      await setSession({ userId: user.id });
+      await setSession({ user });
 
       return { success: true, errors: "User authenticated and created" };
     } catch {

@@ -8,3 +8,10 @@ export type NavigateOptions = {
   icon?: IconName;
   subRoutes?: NavigateOptions[];
 };
+
+export type FormState<T extends Record> =
+  | {
+      errors?: Record<keyof T, string[]>;
+      message?: string;
+    }
+  | undefined;

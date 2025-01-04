@@ -9,9 +9,21 @@ export type NavigateOptions = {
   subRoutes?: NavigateOptions[];
 };
 
-export type FormState<T extends Record> =
+export type Action = (
+  state: Awaited<State> | undefined,
+  payload: FormData,
+) => Promise<State | undefined>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type State = ServerActionResult<any>;
+
+export type ServerActionResult<T> =
   | {
-      errors?: Record<keyof T, string[]>;
-      message?: string;
+      success: true;
+      data: T;
     }
-  | undefined;
+  | {
+      success: false;
+      validationErrors: Record<string, string[]> | null;
+      serverErrors: string | string[] | null;
+    };

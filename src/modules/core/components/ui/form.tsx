@@ -1,4 +1,3 @@
-import NextForm from 'next/form';
 import {
   ComponentProps,
   createContext,
@@ -7,38 +6,40 @@ import {
   useActionState,
   useId,
 } from 'react';
+
+import NextForm from 'next/form';
+
 import { Button, ButtonProps } from './button';
 import { ButtonLoading } from '../button-loading';
 import { Slot } from '@radix-ui/react-slot';
 import { Label } from './label';
-import type { FormState } from '../../types';
+import type { Action, State } from '../../types';
+import { cn } from '../../lib/cn';
 
-type State = FormState<Record<string, unknown>>;
 type InitialState = State | undefined;
-type Action = (state: State, payload: FormData) => Promise<State>;
 
 type FormContextType = {
   state?: State | null;
-  formAction: (formData: FormData) => void | Promise<void>;
+  serverErrors?: string | string[] | null;
   pending: boolean;
 };
 
 type FormFieldContextType = {
   name: string;
-  errors?: string | string[];
   id: string;
+  validationErrors?: string | string[] | null;
 };
 
 const FormContext = createContext<FormContextType>({
   state: null,
-  formAction: () => void {},
+  serverErrors: null,
   pending: false,
 });
 
 const FormFieldContext = createContext<FormFieldContextType>({
+  validationErrors: null,
   name: '',
   id: '',
-  errors: undefined,
 });
 
 const useFormContext = () => {
@@ -52,7 +53,6 @@ const Form = ({
   action,
   initialState,
   children,
-  ref,
   ...props
 }: {
   action: Action;
@@ -61,8 +61,14 @@ const Form = ({
   const [state, formAction, pending] = useActionState(action, initialState);
 
   return (
-    <FormContext.Provider value={{ state, formAction, pending }}>
-      <NextForm action={formAction} ref={ref} {...props}>
+    <FormContext.Provider
+      value={{
+        state,
+        pending,
+        serverErrors: state?.success ? null : state?.serverErrors,
+      }}
+    >
+      <NextForm action={formAction} {...props}>
         {children}
       </NextForm>
     </FormContext.Provider>
@@ -87,7 +93,13 @@ const FormField = <T extends readonly string[], N extends T[number]>({
 
   return (
     <FormFieldContext.Provider
-      value={{ name, id: useId(), errors: state?.errors?.[name] }}
+      value={{
+        name,
+        id: useId(),
+        validationErrors: state?.success
+          ? null
+          : state?.validationErrors?.[name],
+      }}
     >
       {render({ name })}
     </FormFieldContext.Provider>
@@ -104,7 +116,7 @@ const FormItem = ({
   }
 
   return (
-    <div className={['space-y-2', className].join(' ')} {...props}>
+    <div className={cn('space-y-2', className)} {...props}>
       {children}
     </div>
   );
@@ -116,15 +128,15 @@ const FormControl = ({ ref, ...props }: ComponentProps<typeof Slot>) => {
   }
 
   const {
-    fieldContext: { id, errors },
+    fieldContext: { id, validationErrors },
   } = useFormContext();
 
   return (
     <Slot
       ref={ref}
       id={id}
-      aria-describedby={errors ? `${id}-error` : undefined}
-      aria-invalid={Boolean(errors)}
+      aria-describedby={validationErrors ? `${id}-error` : undefined}
+      aria-invalid={Boolean(validationErrors)}
       {...props}
     />
   );
@@ -136,14 +148,14 @@ const FormLabel = ({ className, ...props }: ComponentProps<typeof Label>) => {
   }
 
   const {
-    fieldContext: { id, errors },
+    fieldContext: { id, validationErrors },
   } = useFormContext();
 
   return (
     <Label
-      data-error={errors ? '' : undefined}
+      data-error={validationErrors ? '' : undefined}
       htmlFor={id}
-      className={['[data-error]:text-destructive', className].join(' ')}
+      className={cn('data-[error]:text-destructive', className)}
       {...props}
     />
   );
@@ -164,7 +176,7 @@ const FormDescription = ({
   return (
     <p
       id={id}
-      className={['text-sm text-muted-foreground', className].join(' ')}
+      className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
   );
@@ -174,33 +186,36 @@ const FormMessage = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLParagraphElement>) => {
-  if (!FormContext) {
-    throw new Error('FormMessage must be used within a Form');
+  if (!FormField) {
+    throw new Error('FormMessage must be used within a FormField');
   }
 
   const {
-    fieldContext: { errors },
+    fieldContext: { validationErrors },
   } = useFormContext();
 
-  if (!errors) {
+  if (!validationErrors) {
     return null;
   }
 
-  return (
+  return Array.isArray(validationErrors) ? (
+    <ul>
+      {validationErrors.map((error, i) => (
+        <li
+          key={`${error}-${i}`}
+          className={cn('text-sm font-medium text-destructive')}
+        >
+          {error}
+        </li>
+      ))}
+    </ul>
+  ) : (
     <p
-      data-error={errors ? '' : undefined}
-      className={['text-sm font-medium text-destructive', className].join(' ')}
+      data-error={validationErrors ? '' : undefined}
+      className={cn('text-sm font-medium text-destructive', className)}
       {...props}
     >
-      {Array.isArray(errors) ? (
-        <ul>
-          {errors.map((error, i) => (
-            <li key={`${error}-${i}`}>{error}</li>
-          ))}
-        </ul>
-      ) : (
-        errors
-      )}
+      {validationErrors}
     </p>
   );
 };
@@ -218,7 +233,7 @@ const FormSubmit = ({
       <ButtonLoading
         data-loading={pending}
         text={text}
-        className={['w-full', className].join(' ')}
+        className={cn('w-full', className)}
         {...props}
       />
     );
@@ -228,7 +243,7 @@ const FormSubmit = ({
     <Button
       type="submit"
       data-loading={pending}
-      className={['w-full', className].join(' ')}
+      className={cn('w-full', className)}
       {...props}
     >
       {children}

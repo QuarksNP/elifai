@@ -1,55 +1,73 @@
 'use client';
 
-import { useSignIn } from '../hooks/use-sign-in';
-
 import { Input } from '@/modules/core/components/ui/input';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
+  FormSubmit,
 } from '@/modules/core/components/ui/form';
-import { Button } from '@/modules/core/components/ui/button';
-import { ButtonLoading } from '@/modules/core/components/button-loading';
+import { SignInSchema } from '../lib/definitions';
+import { useLogin } from '../hooks/use-login';
 
 export const SignInForm = () => {
-  const { form, onSubmit } = useSignIn();
+  const { values, handleSubmitAction } = useLogin();
+
+  const control = Object.keys(
+    SignInSchema.shape,
+  ) as (keyof typeof SignInSchema.shape)[];
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="user"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input icon="User" placeholder="Email or username" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input password icon="Lock" placeholder="Password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {form.formState.isSubmitting ? (
-          <ButtonLoading className="w-full" />
-        ) : (
-          <Button className="w-full">Sign in</Button>
+    <Form
+      action={handleSubmitAction}
+      initialState={undefined}
+      formAction="post"
+      className="space-y-4"
+    >
+      <FormField
+        control={control}
+        name="user"
+        render={(field) => (
+          <FormItem>
+            <FormLabel>Email or username</FormLabel>
+            <FormControl>
+              <Input
+                icon="User"
+                placeholder="E.g. example@gmail.com"
+                defaultValue={values.user}
+                required
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
         )}
-      </form>
+      />
+      <FormField
+        control={control}
+        name="password"
+        render={(field) => (
+          <FormItem>
+            <FormLabel>Password</FormLabel>
+            <FormControl>
+              <Input
+                password
+                icon="Lock"
+                placeholder="E.g. *********"
+                defaultValue={values.password}
+                required
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormSubmit>Sign in</FormSubmit>
     </Form>
   );
 };

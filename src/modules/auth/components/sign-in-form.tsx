@@ -10,25 +10,21 @@ import {
   FormMessage,
   FormSubmit,
 } from '@/modules/core/components/ui/form';
-import { SignInSchema } from '../lib/definitions';
 import { useLogin } from '../hooks/use-login';
+import { signInControl } from '../lib/controls';
 
 export const SignInForm = () => {
   const { values, handleSubmitAction } = useLogin();
-
-  const control = Object.keys(
-    SignInSchema.shape,
-  ) as (keyof typeof SignInSchema.shape)[];
 
   return (
     <Form
       action={handleSubmitAction}
       initialState={undefined}
-      formAction="post"
+      formMethod="POST"
       className="space-y-4"
     >
       <FormField
-        control={control}
+        control={signInControl}
         name="user"
         render={(field) => (
           <FormItem>
@@ -47,7 +43,7 @@ export const SignInForm = () => {
         )}
       />
       <FormField
-        control={control}
+        control={signInControl}
         name="password"
         render={(field) => (
           <FormItem>

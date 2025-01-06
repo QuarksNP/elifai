@@ -24,13 +24,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <Label
+        data-has-icon={icon ? '' : undefined}
+        data-is-password={password ? '' : undefined}
         className={cn(
-          'flex items-center h-9 w-full rounded border border-border bg-card text-sm shadow-sm transition-colors has-[:focus]:border-primary',
+          'flex items-center h-9 w-full rounded border border-border bg-card text-sm shadow-sm transition-colors data-[has-icon]:pl-3 data-[is-password]:pr-3 has-[:focus]:border-primary',
           containerClassName,
-          {
-            'pl-3': icon,
-            'pr-3': password,
-          },
         )}
       >
         {icon && <Icon name={icon} />}
@@ -44,12 +42,15 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {password && (
-          <button type="button" onClick={onClick}>
+          <button
+            type="button"
+            onClick={onClick}
+            data-is-showed={show ? '' : undefined}
+            className="group"
+          >
             <Icon
               name={show ? 'EyeOff' : 'Eye'}
-              className={cn('text-primary', {
-                'text-muted-foreground': show,
-              })}
+              className="text-primary group-data-[is-showed]:text-muted-foreground"
             />
           </button>
         )}

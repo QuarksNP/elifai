@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { SignInSchema } from '../lib/definitions';
 
 import type { SignInRequest } from '../types';
-import { ServerActionResult } from '@/modules/core/types';
+import type { ServerActionResult } from '@/modules/core/types';
 
 export const signIn = async (
   _: ServerActionResult<SignInRequest> | undefined,

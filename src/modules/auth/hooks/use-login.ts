@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { signIn } from '../actions/sign-in';
 import { toast } from 'sonner';
 
+import { notFalsyObjectData } from '@/modules/core/lib/not-falsy-data';
+
 import type { SignInRequest } from '../types';
 
 export const useLogin = () => {
@@ -14,14 +16,16 @@ export const useLogin = () => {
     state: Parameters<typeof signIn>[0],
     formData: FormData,
   ) {
-    const user = Object.fromEntries(formData) as SignInRequest;
+    const data = Object.fromEntries(formData) as Partial<SignInRequest>;
 
-    setValues(user);
+    const notFalsyData = notFalsyObjectData<typeof data>(data);
 
-    const result = await signIn(state, user);
+    setValues(notFalsyData);
 
-    if (!result?.success && result?.serverErrors) {
-      toast.error(result.serverErrors);
+    const result = await signIn(state, notFalsyData);
+
+    if (!result?.success) {
+      toast.error(result?.serverErrors);
     }
 
     return result;

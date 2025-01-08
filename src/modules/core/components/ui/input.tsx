@@ -42,25 +42,32 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           containerClassName,
         )}
       >
-        {icon && <Icon name={icon} />}
-        <input
-          type={show && password ? 'password' : type}
-          className={cn(
-            'peer flex px-3 bg-transparent py-1 h-12 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full mt-auto placeholder:opacity-0',
-            className,
-          )}
-          ref={ref}
-          {...props}
-          onChange={(e) => {
-            props.onChange?.(e);
-            handleChange(e.currentTarget.value);
-          }}
-        />
+        <div className={cn('flex mt-auto h-12 items-center grow', {
+          "h-full": Boolean(!value),
+        })}>
+          {icon && <Icon name={icon} className={cn({
+            "hidden": Boolean(!value),
+          })}/>}
+          <input
+            type={show && password ? 'password' : type}
+            className={cn(
+              'peer flex bg-transparent px-3 py-1 h-full file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full placeholder:opacity-0',
+              className,
+            )}
+            ref={ref}
+            {...props}
+            onChange={(e) => {
+              props.onChange?.(e);
+              handleChange(e.currentTarget.value);
+            }}
+          />
+        </div>
         <span
           className={cn(
-            'absolute px-3 text-base peer-focus:top-2 peer-focus:text-[0.8rem] text-muted-foreground transition-all',
+            'absolute px-3 text-base peer-focus:top-1 peer-focus:text-[0.8rem] text-muted-foreground transition-all',
             {
-              'top-2 text-[0.8rem]': Boolean(value),
+              'top-1 text-[0.8rem]': Boolean(value),
+              'px-0': Boolean(icon) && Boolean(value),
             },
           )}
         >
@@ -71,7 +78,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             type="button"
             onClick={onClick}
             data-is-showed={show ? '' : undefined}
-            className="group"
+            className={cn("group", {
+              "h-12 mt-auto flex items-center": Boolean(value),
+            })}
           >
             <Icon
               name={show ? 'EyeOff' : 'Eye'}

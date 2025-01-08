@@ -33,8 +33,6 @@ export const signIn = async (
     };
   }
 
-  if (result.success) {
-    revalidatePath('/portal');
-    redirect('/portal');
-  }
+  revalidatePath('/portal');
+  redirect('/portal');
 };

@@ -199,7 +199,7 @@ const FormMessage = ({
   }
 
   return Array.isArray(validationErrors) ? (
-    <ul>
+    <ul className='list-disc'>
       {validationErrors.map((error, i) => (
         <li
           key={`${error}-${i}`}

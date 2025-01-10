@@ -36,6 +36,16 @@
     min-width: 0;
   }
 
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px inset hsl(0 0% 3.9%) !important;
+  }
+  input:-webkit-autofill{
+    -webkit-text-fill-color: hsl(211 100% 50%) !important;
+}
+
   body {
     font-optical-sizing: auto;
     min-height: 100dvh;

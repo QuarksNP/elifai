@@ -8,14 +8,14 @@ import { Separator } from '@/modules/core/components/ui/separator';
 
 export default function Home() {
   return (
-    <main className="h-full min-h-screen flex flex-col items-center justify-center p-8 gap-2 lg:grid lg:grid-cols-2 lg:gap-8">
+    <main className="h-full max-w-screen-xl mx-auto min-h-screen flex flex-col items-center justify-center p-8 gap-2 lg:grid lg:grid-cols-2 lg:gap-8">
       <section className="h-full flex items-center">
-        <Logo className="w-40 lg:w-full lg:scale-75" />
+        <Logo className="w-40 lg:w-full" />
       </section>
 
       <section className="space-y-8">
         <header>
-          <h1 className="max-w-96 text-xl text-center font-bold lg:text-5xl lg:max-w-full lg:text-start">
+          <h1 className="text-center font-bold lg:text-4xl lg:max-w-full lg:text-start">
             Manage your finances intuitively and without complications
           </h1>
         </header>

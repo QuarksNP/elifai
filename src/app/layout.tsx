@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/modules/core/components/ui/toaster';
-import { Kanit } from 'next/font/google';
+import { JetBrains_Mono } from 'next/font/google';
 
-const kanit = Kanit({
+const jetbrains = JetBrains_Mono({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${kanit.className} antialiased bg-black text-foreground`}
+        className={`${jetbrains.className} antialiased bg-black text-foreground`}
       >
         <div>{auth}</div>
         <div>{children}</div>

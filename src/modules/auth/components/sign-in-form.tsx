@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
   FormSubmit,
 } from '@/modules/core/components/ui/form';
@@ -28,11 +27,10 @@ export const SignInForm = () => {
         name="user"
         render={(field) => (
           <FormItem>
-            <FormLabel>Email or username</FormLabel>
             <FormControl>
               <Input
                 icon="User"
-                placeholder="E.g. example@gmail.com"
+                placeholder="Username or Email"
                 defaultValue={values.user}
                 required
                 {...field}
@@ -47,12 +45,11 @@ export const SignInForm = () => {
         name="password"
         render={(field) => (
           <FormItem>
-            <FormLabel>Password</FormLabel>
             <FormControl>
               <Input
                 password
                 icon="Lock"
-                placeholder="E.g. *********"
+                placeholder="Password"
                 defaultValue={values.password}
                 required
                 {...field}

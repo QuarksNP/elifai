@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
   FormSubmit,
 } from '@/modules/core/components/ui/form';
@@ -31,10 +30,9 @@ export const SignUpForm = () => {
         name="fullname"
         render={(field) => (
           <FormItem>
-            <FormLabel>Full name</FormLabel>
             <FormControl>
               <Input
-                placeholder="e.g. Example Example"
+                placeholder="Full name"
                 {...field}
                 defaultValue={fullname}
                 required
@@ -49,10 +47,9 @@ export const SignUpForm = () => {
         name="username"
         render={(field) => (
           <FormItem>
-            <FormLabel>Username</FormLabel>
             <FormControl>
               <Input
-                placeholder="e.g. example"
+                placeholder="Username"
                 {...field}
                 defaultValue={username}
                 required
@@ -67,10 +64,9 @@ export const SignUpForm = () => {
         name="email"
         render={(field) => (
           <FormItem>
-            <FormLabel>Email</FormLabel>
             <FormControl>
               <Input
-                placeholder="e.g. example@example.com"
+                placeholder="Email"
                 {...field}
                 type="email"
                 defaultValue={email}
@@ -86,10 +82,9 @@ export const SignUpForm = () => {
         name="password"
         render={(field) => (
           <FormItem>
-            <FormLabel>Password</FormLabel>
             <FormControl>
               <Input
-                placeholder="e.g. 123456"
+                placeholder="password"
                 {...field}
                 password
                 defaultValue={password}
@@ -105,10 +100,9 @@ export const SignUpForm = () => {
         name="confirmPassword"
         render={(field) => (
           <FormItem>
-            <FormLabel>Confirm password</FormLabel>
             <FormControl>
               <Input
-                placeholder="e.g. 123456"
+                placeholder="Confirm password"
                 {...field}
                 password
                 defaultValue={confirmPassword}

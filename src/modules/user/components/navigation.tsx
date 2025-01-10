@@ -3,12 +3,13 @@
 import { LogoutBtn } from '@/modules/auth/components/logout-btn';
 import { ButtonAsLink } from '@/modules/core/components/button-as-link';
 import { Logo } from '@/modules/core/components/logo';
-import { Button } from '@/modules/core/components/ui/button';
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@/modules/core/components/ui/collapsible';
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/modules/core/components/ui/accordion';
+import { Button } from '@/modules/core/components/ui/button';
 import { Icon } from '@/modules/core/components/ui/icon';
 import { Separator } from '@/modules/core/components/ui/separator';
 import {
@@ -18,7 +19,6 @@ import {
   SheetTrigger,
 } from '@/modules/core/components/ui/sheet';
 import { useMediaQuery } from '@/modules/core/hooks/use-media-query';
-import { useOpenCollapsibles } from '@/modules/core/hooks/use-open-collapsibles';
 import { cn } from '@/modules/core/lib/cn';
 import { NavigateOptions } from '@/modules/core/types';
 import { Profile } from '@/modules/user/components/profile';
@@ -37,7 +37,6 @@ const COLLAPSIBLE_ITEM_CLASSNAME =
 
 const SideBarContent = () => {
   const pathname = usePathname();
-  const { isOpen, handleToggle } = useOpenCollapsibles();
 
   return (
     <aside className="flex flex-col h-full overflow-y-auto p-4 gap-8 md:h-screen md:border-r md:border-border md:p-8 text-sm text-muted-foreground">
@@ -52,9 +51,13 @@ const SideBarContent = () => {
             <ButtonAsLink
               href={href}
               key={href + i}
-              className={cn('justify-start gap-2', COLLAPSIBLE_ITEM_CLASSNAME, {
-                'text-primary': isActive,
-              })}
+              className={cn(
+                'justify-start gap-2 self-start',
+                COLLAPSIBLE_ITEM_CLASSNAME,
+                {
+                  'text-primary': isActive,
+                },
+              )}
               variant="link"
               size="none"
             >
@@ -64,56 +67,43 @@ const SideBarContent = () => {
           );
 
         return (
-          <Collapsible
-            key={href}
-            open={!!isOpen[name]}
-            onOpenChange={() => handleToggle(name)}
-          >
-            <CollapsibleTrigger asChild>
-              <ButtonAsLink
-                href={subRoutes[0]?.href ?? ''}
-                variant="link"
-                size="none"
+          <Accordion key={href} type="single" collapsible>
+            <AccordionItem value={name} className='border-none'>
+              <AccordionTrigger
                 className={cn(
-                  'p-2 w-full justify-between',
+                  'w-full justify-between',
                   COLLAPSIBLE_ITEM_CLASSNAME,
                   {
                     'text-primary': pathname.startsWith(href),
                   },
                 )}
               >
-                <div className="flex items-center gap-2">
+                <div className="flex items-start gap-2">
                   {icon && <Icon name={icon} className="text-primary" />}
                   <span className="line-clamp-1">{name}</span>
                 </div>
-
-                {isOpen[name] ? (
-                  <Icon name="ChevronDown" size={16} />
-                ) : (
-                  <Icon name="ChevronRight" size={16} />
-                )}
-              </ButtonAsLink>
-            </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-2 text-sm text-muted-foreground grow flex-col mt-6">
-              {subRoutes?.map(({ name, href, icon }, i) => (
-                <ButtonAsLink
-                  key={href + i}
-                  href={href}
-                  variant="link"
-                  className={cn(
-                    'flex justify-start gap-2',
-                    COLLAPSIBLE_ITEM_CLASSNAME,
-                    {
-                      'text-primary': href === pathname,
-                    },
-                  )}
-                >
-                  {icon && <Icon name={icon} className="h-4 w-4" />}
-                  <span className="line-clamp-1">{name}</span>
-                </ButtonAsLink>
-              ))}
-            </CollapsibleContent>
-          </Collapsible>
+              </AccordionTrigger>
+              <AccordionContent className="flex flex-col items-start">
+                {subRoutes?.map(({ name, href, icon }, i) => (
+                  <ButtonAsLink
+                    key={href + i}
+                    href={href}
+                    variant="link"
+                    className={cn(
+                      'flex justify-start gap-2',
+                      COLLAPSIBLE_ITEM_CLASSNAME,
+                      {
+                        'text-primary': href === pathname,
+                      },
+                    )}
+                  >
+                    {icon && <Icon name={icon} className="h-4 w-4" />}
+                    <span className="line-clamp-1">{name}</span>
+                  </ButtonAsLink>
+                ))}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         );
       })}
 
@@ -141,7 +131,7 @@ export const Navigation = ({ user }: { user?: { fullName: string } }) => {
             <Icon name="Menu" size={24} />
           </Button>
         </SheetTrigger>
-        <SheetContent className="border-border flex flex-col">
+        <SheetContent className="border-border flex flex-col w-full">
           <SheetHeader>
             <header className="flex flex-col items-center justify-center gap-4 mb-8">
               {user && (

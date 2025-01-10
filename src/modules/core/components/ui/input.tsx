@@ -51,7 +51,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             type={show && password ? 'password' : type}
             className={cn(
-              'peer flex bg-transparent px-3 py-1 h-full file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full placeholder:opacity-0',
+              'peer flex bg-transparent px-3 py-1 h-full file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full placeholder:opacity-0 autofill:bg-white',
               className,
             )}
             ref={ref}
@@ -64,10 +64,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
         <span
           className={cn(
-            'absolute px-3 text-base peer-focus:top-1 peer-focus:text-[0.8rem] text-muted-foreground transition-all',
+            'absolute flex px-3 text-base peer-focus:top-1 peer-focus:text-sm text-muted-foreground transition-all',
             {
-              'top-1 text-[0.8rem]': Boolean(value),
-              'px-0': Boolean(icon) && Boolean(value),
+              'top-1 text-sm': Boolean(value),
+              'px-[0px]': Boolean(icon) && Boolean(value),
             },
           )}
         >

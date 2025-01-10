@@ -2,21 +2,17 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/modules/core/components/ui/card';
 import type { AccountCreateInput } from '../types';
-import { Separator } from '@/modules/core/components/ui/separator';
-import { Icon } from '@/modules/core/components/ui/icon';
+import { Icon, type IconName } from '@/modules/core/components/ui/icon';
 
 interface AccountCardProps
   extends Pick<
     AccountCreateInput,
     'title' | 'number' | 'currentBalance' | 'totalBalance' | 'type'
-  > {
-  n?: number;
-}
+  > {}
 
 export const AccountCard = ({
   title,
@@ -25,27 +21,26 @@ export const AccountCard = ({
   totalBalance,
   type,
 }: AccountCardProps) => {
-  const renderIcon = () => {
+  const getIconName = (): IconName | null => {
     switch (type) {
       case 'CREDIT_CARD':
-        return <Icon name="CreditCard" className="text-primary" size={36} />;
+        return 'CreditCard';
       case 'INVESTMENT':
-        return <Icon name="DollarSign" className="text-primary" size={36} />;
+        return 'HandCoins';
       case 'SAVINGS':
-        return <Icon name="PiggyBank" className="text-primary" size={36} />;
+        return 'Landmark';
       default:
-        return <div />;
+        return null;
     }
   };
 
+  const iconName = getIconName();
+
   return (
-    <Card>
-      <CardHeader className="flex-row items-center gap-4">
-        {renderIcon()}
-        <div>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription className="text-primary">{number}</CardDescription>
-        </div>
+    <Card className="relative flex flex-col justify-center">
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription className="text-primary">{number}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {currentBalance && (
@@ -70,11 +65,13 @@ export const AccountCard = ({
             })}
           </h2>
         </div>
-        <Separator orientation="horizontal" className="grow" />
       </CardContent>
-      <CardFooter>
-        <span className="text-sm text-muted-foreground">Recent Activity</span>
-      </CardFooter>
+      {iconName && (
+        <Icon
+          name={iconName}
+          className="hidden sm:block sm:absolute sm:right-0 sm:size-48 sm:translate-x-10 sm:-scale-x-100 sm:opacity-20 sm:stroke-[1.3]"
+        />
+      )}
     </Card>
   );
 };

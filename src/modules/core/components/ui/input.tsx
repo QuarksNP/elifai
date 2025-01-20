@@ -16,83 +16,85 @@ export interface InputProps
   containerClassName?: string;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    {
-      className,
-      placeholder,
-      icon,
-      type,
-      password,
-      containerClassName,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    const [show, onClick] = useClick(true);
-    const { value, handleChange } = useInputChange();
+export const Input = ({
+  className,
+  defaultValue,
+  placeholder,
+  icon,
+  type,
+  password,
+  containerClassName,
+  children,
+  ...props
+}: InputProps) => {
+  const { value, handleChange } = useInputChange(defaultValue);
+  const [show, onClick] = useClick(true);
 
-    return (
-      <Label
-        data-has-icon={icon ? '' : undefined}
-        data-is-password={password ? '' : undefined}
+  const allowValue = Boolean(value) || value === 0;
+
+  return (
+    <Label
+      data-has-icon={icon ? '' : undefined}
+      data-is-password={password ? '' : undefined}
+      className={cn(
+        'flex relative items-center h-16 w-full rounded border border-border bg-card text-sm shadow-sm transition-colors data-[has-icon]:pl-3 data-[is-password]:pr-3 has-[:focus]:border-primary',
+        containerClassName,
+      )}
+    >
+      <div
+        className={cn('flex mt-auto h-12 items-center grow', {
+          'h-full': !allowValue,
+        })}
+      >
+        {icon && (
+          <Icon
+            name={icon}
+            className={cn({
+              hidden: !allowValue,
+            })}
+          />
+        )}
+        <input
+          defaultValue={defaultValue}
+          type={show && password ? 'password' : type}
+          className={cn(
+            'peer flex bg-transparent px-3 py-1 h-full file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full placeholder:opacity-0 autofill:bg-white',
+            className,
+          )}
+          {...props}
+          onChange={(e) => {
+            props.onChange?.(e);
+            handleChange(e.currentTarget.value);
+          }}
+        />
+      </div>
+      <span
         className={cn(
-          'flex relative items-center h-16 w-full rounded border border-border bg-card text-sm shadow-sm transition-colors data-[has-icon]:pl-3 data-[is-password]:pr-3 has-[:focus]:border-primary',
-          containerClassName,
+          'absolute flex px-3 text-base peer-focus:top-1 peer-focus:text-sm text-muted-foreground transition-all',
+          {
+            'top-1 text-sm': allowValue,
+            'px-[0px]': icon && allowValue,
+          },
         )}
       >
-        <div className={cn('flex mt-auto h-12 items-center grow', {
-          "h-full": Boolean(!value),
-        })}>
-          {icon && <Icon name={icon} className={cn({
-            "hidden": Boolean(!value),
-          })}/>}
-          <input
-            type={show && password ? 'password' : type}
-            className={cn(
-              'peer flex bg-transparent px-3 py-1 h-full file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:none disabled:cursor-not-allowed disabled:opacity-50 w-full placeholder:opacity-0 autofill:bg-white',
-              className,
-            )}
-            ref={ref}
-            {...props}
-            onChange={(e) => {
-              props.onChange?.(e);
-              handleChange(e.currentTarget.value);
-            }}
-          />
-        </div>
-        <span
-          className={cn(
-            'absolute flex px-3 text-base peer-focus:top-1 peer-focus:text-sm text-muted-foreground transition-all',
-            {
-              'top-1 text-sm': Boolean(value),
-              'px-[0px]': Boolean(icon) && Boolean(value),
-            },
-          )}
+        {placeholder}
+      </span>
+      {password && (
+        <button
+          type="button"
+          onClick={onClick}
+          data-is-showed={show ? '' : undefined}
+          className={cn('group', {
+            'h-12 mt-auto flex items-center': allowValue,
+          })}
         >
-          {placeholder}
-        </span>
-        {password && (
-          <button
-            type="button"
-            onClick={onClick}
-            data-is-showed={show ? '' : undefined}
-            className={cn("group", {
-              "h-12 mt-auto flex items-center": Boolean(value),
-            })}
-          >
-            <Icon
-              name={show ? 'EyeOff' : 'Eye'}
-              className="text-primary group-data-[is-showed]:text-muted-foreground"
-            />
-          </button>
-        )}
-        {children}
-      </Label>
-    );
-  },
-);
-Input.displayName = 'Input';
-
-export { Input };
+          <Icon
+            name={show ? 'EyeOff' : 'Eye'}
+            className="text-primary group-data-[is-showed]:text-muted-foreground"
+          />
+        </button>
+      )}
+      {children}
+    </Label>
+  );
+};
